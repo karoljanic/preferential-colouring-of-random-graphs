@@ -1,16 +1,16 @@
 #ifndef GRAPH_SPARSE_GRAPH_HPP
 #define GRAPH_SPARSE_GRAPH_HPP
 
-#include <algorithm>    // std::find
+#include <algorithm>    // std::find_if, std::swap
 #include <concepts>     // concepts
 #include <cstddef>      // std::size_t
 #include <functional>   // std::function
+#include <fstream>      // std::ofstream
 #include <map>          // std::map
 #include <queue>        // std::queue
 #include <stack>        // std::stack
+#include <string>       // std::string
 #include <vector>       // std::vector
-
-#include <iostream>
 
 #include "graph.hpp"
 
@@ -30,13 +30,24 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
   void addNode(NodeType &node) override {
 	node.id = nodes_.size();
+	node.color = "#005a00";
 	nodes_.emplace_back(node);
 	adjacency_list_.emplace_back(std::vector<EdgeType>());
   }
 
   bool addEdge(EdgeType &edge) override {
+	if (edge.source == edge.target) {
+	  return false;
+	}
+
 	if (edge.source > edge.target) {
 	  std::swap(edge.source, edge.target);
+	}
+
+	if ((edge.source + edge.target) % 2 == 0) {
+	  edge.color = "#ff0000";
+	} else {
+	  edge.color = "#0000ff";
 	}
 
 	if (std::find_if(adjacency_list_[edge.source].begin(), adjacency_list_[edge.source].end(),
@@ -157,6 +168,58 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 		}
 	  }
 	}
+  }
+
+  void saveToFile(const std::string &filename) const override {
+	std::ofstream file{filename};
+
+	file << "{" << std::endl << "  \"nodes\": [" << std::endl;
+	for (size_t i = 0; i < getNodesNumber(); ++i) {
+	  file << "    {\"id\": " << nodes_[i].id << "}," << std::endl;
+	}
+	file << "    { }" << std::endl;
+
+	file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
+	for (size_t i = 0; i < getNodesNumber(); ++i) {
+	  for (size_t j = 0; j < adjacency_list_[i].size(); ++j) {
+		const EdgeType &edge = adjacency_list_[i][j];
+		if (edge.source == i) {
+		  file << "    {\"source\": " << edge.source << ", \"target\": " << edge.target << "}," << std::endl;
+		}
+	  }
+	}
+	file << "    { }" << std::endl;
+
+	file << "  ]" << std::endl << "}" << std::endl;
+  }
+
+  void saveToFile(const std::string &filename,
+				  std::function<void(std::ofstream &file, const NodeType &)> vertexCallback,
+				  std::function<void(std::ofstream &file, const EdgeType &)> edgeCallback) const override {
+	std::ofstream file{filename};
+
+	file << "{" << std::endl << "  \"nodes\": [" << std::endl;
+	for (size_t i = 0; i < getNodesNumber(); ++i) {
+	  file << "    {\"id\": " << nodes_[i].id;
+	  vertexCallback(file, nodes_[i]);
+	  file << "}," << std::endl;
+	}
+	file << "    { }" << std::endl;
+
+	file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
+	for (size_t i = 0; i < getNodesNumber(); ++i) {
+	  for (size_t j = 0; j < adjacency_list_[i].size(); ++j) {
+		const EdgeType &edge = adjacency_list_[i][j];
+		if (edge.source == i) {
+		  file << "    {\"source\": " << edge.source << ", \"target\": " << edge.target;
+		  edgeCallback(file, edge);
+		  file << "}," << std::endl;
+		}
+	  }
+	}
+	file << "    { }" << std::endl;
+
+	file << "  ]" << std::endl << "}" << std::endl;
   }
 
  private:

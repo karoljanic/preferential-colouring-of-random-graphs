@@ -1,7 +1,7 @@
 #include "random_graph_factory.hpp"
 
-#include <random>
-#include <stdexcept>
+#include <random>       // std::mt19937, std::random_device, std::uniform_real_distribution, std::uniform_int_distribution
+#include <stdexcept>    // std::invalid_argument
 
 namespace graph::random {
 BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_t initial_nodes_number,
@@ -41,7 +41,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_
 	graph.addNode(node);
 
 	size_t edges_added{0};
-	while (edges_added < edges_per_new_node_number && graph.getNodesNumber() < final_nodes_number) {
+	while (edges_added < edges_per_new_node_number) {
 	  std::uniform_int_distribution<size_t> node_distribution{0, graph.getNodesNumber() - 1};
 	  const BANode rand_node = graph.getNode(node_distribution(generator));
 	  if (rand_node.id == node.id) {
@@ -96,7 +96,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 	graph.addNode(node);
 
 	size_t edges_added{0};
-	while (edges_added < edges_per_new_node_number && graph.getNodesNumber() < final_nodes_number) {
+	while (edges_added < edges_per_new_node_number) {
 	  std::uniform_int_distribution<size_t> node_distribution{0, graph.getNodesNumber() - 1};
 	  const BANode rand_node = graph.getNode(node_distribution(generator));
 	  if (rand_node.id == node.id) {
@@ -106,7 +106,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 	  const std::vector<BANode> rand_node_neighbours = graph.getNeighbours(rand_node.id);
 	  std::uniform_int_distribution<size_t>
 		  neighbour_distribution{0, rand_node_neighbours.size() - 1};
-	  const BANode rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
+	  const BANode& rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
 
 	  BAEdge edge{node.id, rand_neighbour.id};
 	  const bool edge_added = graph.addEdge(edge);
@@ -157,7 +157,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 	graph.addNode(node);
 
 	size_t edges_added{0};
-	while (edges_added < edges_per_new_node_number && graph.getNodesNumber() < final_nodes_number) {
+	while (edges_added < edges_per_new_node_number) {
 	  std::uniform_int_distribution<size_t> node_distribution{0, graph.getNodesNumber() - 1};
 	  const BANode rand_node = graph.getNode(node_distribution(generator));
 	  if (rand_node.id == node.id) {
@@ -176,7 +176,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 		std::uniform_int_distribution<size_t>
 			neighbour_distribution{0, rand_node_neighbours.size() - 1};
 
-		const BANode rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
+		const BANode& rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
 		BAEdge edge{node.id, rand_neighbour.id};
 		const bool edgeAdded = graph.addEdge(edge);
 

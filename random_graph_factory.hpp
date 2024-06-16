@@ -3,16 +3,21 @@
 #ifndef GRAPH_RANDOM_GRAPH_FACTORY_HPP
 #define GRAPH_RANDOM_GRAPH_FACTORY_HPP
 
+#include <cstddef>      // std::size_t
+#include <string>       // std::string
+
 #include "sparse_graph.hpp"
 
 namespace graph::random {
 struct BANode {
   size_t id{0};
+  std::string color{"#000000"};
 };
 
 struct BAEdge {
   size_t source{0};
   size_t target{0};
+  std::string color{"#000000"};
 };
 
 typedef SparseGraph<BANode, BAEdge> BAGraph;

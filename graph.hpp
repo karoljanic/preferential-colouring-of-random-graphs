@@ -5,6 +5,7 @@
 #include <cstddef>       // std::size_t
 #include <functional>    // std::function
 #include <map>           // std::map
+#include <string>        // std::string
 #include <vector>        // std::vector
 
 namespace graph {
@@ -59,6 +60,11 @@ class Graph {
 
   virtual void dfs(size_t start_node_id, std::function<void(const NodeType &)> callback) const = 0;
   virtual void bfs(size_t start_node_id, std::function<void(const NodeType &)> callback) const = 0;
+
+  virtual void saveToFile(const std::string &filename) const = 0;
+  virtual void saveToFile(const std::string &filename,
+						  std::function<void(std::ofstream &file, const NodeType &)> vertexCallback,
+						  std::function<void(std::ofstream &file, const EdgeType &)> edgeCallback) const = 0;
 };
 } // namespace graph
 
