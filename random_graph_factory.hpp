@@ -1,3 +1,5 @@
+// Based on: https://barabasi.com/f/622.pdf
+
 #ifndef GRAPH_RANDOM_GRAPH_FACTORY_HPP
 #define GRAPH_RANDOM_GRAPH_FACTORY_HPP
 
@@ -5,12 +7,12 @@
 
 namespace graph::random {
 struct BANode {
-  size_t id;
+  size_t id{0};
 };
 
 struct BAEdge {
-  size_t source;
-  size_t target;
+  size_t source{0};
+  size_t target{0};
 };
 
 typedef SparseGraph<BANode, BAEdge> BAGraph;
@@ -27,9 +29,20 @@ class RandomGraphFactory {
 
   ~RandomGraphFactory() = default;
 
-  BAGraph createBarabasiAlbertWithPreferentialAttachment(size_t nodes_number, size_t edges_number);
-  BAGraph createBarabasiAlbertWithLinkSelection(size_t nodes_number, size_t edges_number);
-  BAGraph createBarabasiAlbertWithCopyingModel(size_t nodes_number, size_t edges_number);
+  [[nodiscard]]
+  static BAGraph createBarabasiAlbertWithPreferentialAttachment(size_t initial_nodes_number,
+																size_t final_nodes_number,
+																size_t edges_per_new_node_number,
+																float exponent_parameter);
+  [[nodiscard]]
+  static BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
+													   size_t final_nodes_number,
+													   size_t edges_per_new_node_number);
+  [[nodiscard]]
+  static BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
+													  size_t final_nodes_number,
+													  size_t edges_per_new_node_number,
+													  float copy_probability);
 };
 } // namespace graph::random
 

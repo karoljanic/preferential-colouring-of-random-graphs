@@ -1,6 +1,7 @@
 #ifndef GRAPH_SPARSE_GRAPH_HPP
 #define GRAPH_SPARSE_GRAPH_HPP
 
+#include <algorithm>    // std::find
 #include <concepts>     // concepts
 #include <cstddef>      // std::size_t
 #include <functional>   // std::function
@@ -8,6 +9,8 @@
 #include <queue>        // std::queue
 #include <stack>        // std::stack
 #include <vector>       // std::vector
+
+#include <iostream>
 
 #include "graph.hpp"
 
@@ -31,23 +34,39 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 	adjacency_list_.emplace_back(std::vector<EdgeType>());
   }
 
-  void addEdge(EdgeType &edge) override {
+  bool addEdge(EdgeType &edge) override {
+	if (edge.source > edge.target) {
+	  std::swap(edge.source, edge.target);
+	}
+
+	if (std::find_if(adjacency_list_[edge.source].begin(), adjacency_list_[edge.source].end(),
+					 [&edge](const EdgeType &e) { return e.target == edge.target && e.source == edge.source; })
+		!= adjacency_list_[edge.source].end()) {
+	  return false;
+	}
+
 	adjacency_list_[edge.source].emplace_back(edge);
 	adjacency_list_[edge.target].emplace_back(edge);
+
+	return true;
   }
 
+  [[nodiscard]]
   NodeType getNode(size_t node_id) const override {
 	return nodes_[node_id];
   }
 
+  [[nodiscard]]
   EdgeType getEdge(size_t source, size_t target) const override {
 	return adjacency_list_[source][target];
   }
 
+  [[nodiscard]]
   size_t getNodesNumber() const override {
 	return nodes_.size();
   }
 
+  [[nodiscard]]
   size_t getEdgesNumber() const override {
 	size_t adjacency_list_number = 0;
 	for (const auto &node_edges : adjacency_list_) {
@@ -57,10 +76,12 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 	return adjacency_list_number / 2;
   }
 
+  [[nodiscard]]
   float getDensity() const override {
 	return static_cast<float>(2 * getEdgesNumber()) / (getNodesNumber() * (getNodesNumber() - 1));
   }
 
+  [[nodiscard]]
   std::vector<NodeType> getNeighbours(size_t node_id) const override {
 	std::vector<NodeType> neighbours;
 	for (const auto &edge : adjacency_list_[node_id]) {
@@ -70,14 +91,17 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 	return neighbours;
   }
 
+  [[nodiscard]]
   std::vector<EdgeType> getAdjacentEdges(size_t node_id) const override {
 	return adjacency_list_[node_id];
   }
 
+  [[nodiscard]]
   size_t getDegree(size_t node_id) const override {
 	return adjacency_list_[node_id].size();
   }
 
+  [[nodiscard]]
   std::map<size_t, size_t> getDegreesHistogram() const override {
 	std::map<size_t, size_t> histogram;
 	for (const auto &node_edges : adjacency_list_) {
@@ -104,9 +128,9 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 		callback(nodes_[node_id]);
 		visited[node_id] = true;
 
-		for (const size_t &neighbor_id : adjacency_list_.at(node_id)) {
-		  if (!visited[neighbor_id]) {
-			stack.push(nodes_[neighbor_id]);
+		for (const EdgeType &neighbor : adjacency_list_.at(node_id)) {
+		  if (!visited[neighbor.target]) {
+			stack.push(neighbor.target);
 		  }
 		}
 	  }
@@ -126,9 +150,9 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 		callback(nodes_[node_id]);
 		visited[node_id] = true;
 
-		for (const size_t &neighbor_id : adjacency_list_.at(node_id)) {
-		  if (!visited[neighbor_id]) {
-			queue.push(nodes_[neighbor_id]);
+		for (const EdgeType &neighbor : adjacency_list_.at(node_id)) {
+		  if (!visited[neighbor.target]) {
+			queue.push(neighbor.target);
 		  }
 		}
 	  }

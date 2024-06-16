@@ -33,19 +33,28 @@ class Graph {
   virtual ~Graph() = default;
 
   virtual void addNode(NodeType &node) = 0;
-  virtual void addEdge(EdgeType &edge) = 0;
+  virtual bool addEdge(EdgeType &edge) = 0;
 
+  [[nodiscard]]
   virtual NodeType getNode(size_t node_id) const = 0;
+  [[nodiscard]]
   virtual EdgeType getEdge(size_t source, size_t target) const = 0;
 
+  [[nodiscard]]
   virtual size_t getNodesNumber() const = 0;
+  [[nodiscard]]
   virtual size_t getEdgesNumber() const = 0;
+  [[nodiscard]]
   virtual float getDensity() const = 0;
 
+  [[nodiscard]]
   virtual std::vector<NodeType> getNeighbours(size_t node_id) const = 0;
+  [[nodiscard]]
   virtual std::vector<EdgeType> getAdjacentEdges(size_t node_id) const = 0;
 
+  [[nodiscard]]
   virtual size_t getDegree(size_t node_id) const = 0;
+  [[nodiscard]]
   virtual std::map<size_t, size_t> getDegreesHistogram() const = 0;
 
   virtual void dfs(size_t start_node_id, std::function<void(const NodeType &)> callback) const = 0;
