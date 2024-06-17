@@ -3,25 +3,14 @@
 #ifndef GRAPH_RANDOM_GRAPH_FACTORY_HPP
 #define GRAPH_RANDOM_GRAPH_FACTORY_HPP
 
-#include <cstddef>      // std::size_t
-#include <string>       // std::string
+#include <cstddef>            // std::size_t
+#include <memory>                // std::unique_ptr
+#include <string>            // std::string
 
-#include "sparse_graph.hpp"
+#include "ba_graph.hpp"        // graph::random::BAGraph
+#include "graph_painter.hpp"    // graph::random::GraphPainter
 
 namespace graph::random {
-struct BANode {
-  size_t id{0};
-  std::string color{"#000000"};
-};
-
-struct BAEdge {
-  size_t source{0};
-  size_t target{0};
-  std::string color{"#000000"};
-};
-
-typedef SparseGraph<BANode, BAEdge> BAGraph;
-
 class RandomGraphFactory {
  public:
   RandomGraphFactory() = default;
@@ -38,16 +27,19 @@ class RandomGraphFactory {
   static BAGraph createBarabasiAlbertWithPreferentialAttachment(size_t initial_nodes_number,
 																size_t final_nodes_number,
 																size_t edges_per_new_node_number,
-																float exponent_parameter);
+																float exponent_parameter,
+																GraphPainter* painter = nullptr);
   [[nodiscard]]
   static BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
 													   size_t final_nodes_number,
-													   size_t edges_per_new_node_number);
+													   size_t edges_per_new_node_number,
+													   GraphPainter* painter = nullptr);
   [[nodiscard]]
   static BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
 													  size_t final_nodes_number,
 													  size_t edges_per_new_node_number,
-													  float copy_probability);
+													  float copy_probability,
+													  GraphPainter* painter = nullptr);
 };
 } // namespace graph::random
 

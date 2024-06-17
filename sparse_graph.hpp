@@ -30,45 +30,37 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
   void addNode(NodeType &node) override {
 	node.id = nodes_.size();
-	node.color = "#005a00";
 	nodes_.emplace_back(node);
 	adjacency_list_.emplace_back(std::vector<EdgeType>());
   }
 
-  bool addEdge(EdgeType &edge) override {
-	if (edge.source == edge.target) {
-	  return false;
-	}
-
+  void addEdge(EdgeType &edge) override {
 	if (edge.source > edge.target) {
 	  std::swap(edge.source, edge.target);
 	}
 
-	if ((edge.source + edge.target) % 2 == 0) {
-	  edge.color = "#ff0000";
-	} else {
-	  edge.color = "#0000ff";
-	}
-
-	if (std::find_if(adjacency_list_[edge.source].begin(), adjacency_list_[edge.source].end(),
-					 [&edge](const EdgeType &e) { return e.target == edge.target && e.source == edge.source; })
-		!= adjacency_list_[edge.source].end()) {
-	  return false;
-	}
-
 	adjacency_list_[edge.source].emplace_back(edge);
 	adjacency_list_[edge.target].emplace_back(edge);
-
-	return true;
   }
 
   [[nodiscard]]
-  NodeType getNode(size_t node_id) const override {
+  bool edgeExists(const EdgeType &e) const override {
+	size_t source = e.source < e.target ? e.source : e.target;
+	size_t target = e.source < e.target ? e.target : e.source;
+
+	return std::find_if(adjacency_list_[source].begin(), adjacency_list_[source].end(),
+						[&target](const EdgeType &e) {
+						  return e.target == target;
+						}) != adjacency_list_[source].end();
+  }
+
+  [[nodiscard]]
+  const NodeType& getNode(size_t node_id) const override {
 	return nodes_[node_id];
   }
 
   [[nodiscard]]
-  EdgeType getEdge(size_t source, size_t target) const override {
+  const EdgeType& getEdge(size_t source, size_t target) const override {
 	return adjacency_list_[source][target];
   }
 

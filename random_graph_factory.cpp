@@ -7,7 +7,8 @@ namespace graph::random {
 BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_t initial_nodes_number,
 																		   size_t final_nodes_number,
 																		   size_t edges_per_new_node_number,
-																		   float exponent_parameter) {
+																		   float exponent_parameter,
+																		   GraphPainter* painter) {
   if (edges_per_new_node_number < 1 || edges_per_new_node_number >= final_nodes_number) {
 	throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
   }
@@ -26,11 +27,15 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_
 
   BAGraph graph;
   BANode central_node{};
+  painter->paintNode(graph, central_node);
   graph.addNode(central_node);
   for (size_t i = 1; i < initial_nodes_number; ++i) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
+
 	BAEdge edge{node.id, central_node.id};
+	painter->paintEdge(graph, edge);
 	graph.addEdge(edge);
   }
 
@@ -38,6 +43,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_
   std::uniform_real_distribution<float> selection_distribution{0.0F, 1.0F};
   while (graph.getNodesNumber() < final_nodes_number) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
 
 	size_t edges_added{0};
@@ -53,9 +59,9 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_
 								   exponent_parameter);
 	  if (selection_distribution(generator) < probability) {
 		BAEdge edge{node.id, rand_node.id};
-		const bool edgeAdded = graph.addEdge(edge);
-
-		if (edgeAdded) {
+		if (!graph.edgeExists(edge)) {
+		  painter->paintEdge(graph, edge);
+		  graph.addEdge(edge);
 		  ++edges_added;
 		}
 	  }
@@ -67,7 +73,8 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachment(size_
 
 BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
 																  size_t final_nodes_number,
-																  size_t edges_per_new_node_number) {
+																  size_t edges_per_new_node_number,
+																  GraphPainter* painter) {
   if (edges_per_new_node_number < 1 || edges_per_new_node_number >= final_nodes_number) {
 	throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
   }
@@ -82,17 +89,22 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 
   BAGraph graph;
   BANode central_node{};
+  painter->paintNode(graph, central_node);
   graph.addNode(central_node);
   for (size_t i = 1; i < initial_nodes_number; ++i) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
+
 	BAEdge edge{node.id, central_node.id};
+	painter->paintEdge(graph, edge);
 	graph.addEdge(edge);
   }
 
   std::mt19937 generator{std::random_device{}()};
   while (graph.getNodesNumber() < final_nodes_number) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
 
 	size_t edges_added{0};
@@ -106,12 +118,12 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 	  const std::vector<BANode> rand_node_neighbours = graph.getNeighbours(rand_node.id);
 	  std::uniform_int_distribution<size_t>
 		  neighbour_distribution{0, rand_node_neighbours.size() - 1};
-	  const BANode& rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
+	  const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
 
 	  BAEdge edge{node.id, rand_neighbour.id};
-	  const bool edge_added = graph.addEdge(edge);
-
-	  if (edge_added) {
+	  if (!graph.edgeExists(edge)) {
+		painter->paintEdge(graph, edge);
+		graph.addEdge(edge);
 		++edges_added;
 	  }
 	}
@@ -123,7 +135,8 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
 																 size_t final_nodes_number,
 																 size_t edges_per_new_node_number,
-																 float copy_probability) {
+																 float copy_probability,
+																 GraphPainter* painter) {
   if (edges_per_new_node_number < 1 || edges_per_new_node_number >= final_nodes_number) {
 	throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
   }
@@ -142,11 +155,15 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 
   BAGraph graph;
   BANode central_node{};
+  painter->paintNode(graph, central_node);
   graph.addNode(central_node);
   for (size_t i = 1; i < initial_nodes_number; ++i) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
+
 	BAEdge edge{node.id, central_node.id};
+	painter->paintEdge(graph, edge);
 	graph.addEdge(edge);
   }
 
@@ -154,6 +171,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
   std::uniform_real_distribution<float> option_distribution{0.0F, 1.0F};
   while (graph.getNodesNumber() < final_nodes_number) {
 	BANode node{};
+	painter->paintNode(graph, node);
 	graph.addNode(node);
 
 	size_t edges_added{0};
@@ -166,9 +184,9 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 
 	  if (option_distribution(generator) < copy_probability) {
 		BAEdge edge{node.id, rand_node.id};
-		const bool edgeAdded = graph.addEdge(edge);
-
-		if (edgeAdded) {
+		if (!graph.edgeExists(edge)) {
+		  painter->paintEdge(graph, edge);
+		  graph.addEdge(edge);
 		  ++edges_added;
 		}
 	  } else {
@@ -176,11 +194,11 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 		std::uniform_int_distribution<size_t>
 			neighbour_distribution{0, rand_node_neighbours.size() - 1};
 
-		const BANode& rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
+		const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
 		BAEdge edge{node.id, rand_neighbour.id};
-		const bool edgeAdded = graph.addEdge(edge);
-
-		if (edgeAdded) {
+		if (!graph.edgeExists(edge)) {
+		  painter->paintEdge(graph, edge);
+		  graph.addEdge(edge);
 		  ++edges_added;
 		}
 	  }

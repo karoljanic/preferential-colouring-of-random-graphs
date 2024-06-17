@@ -34,12 +34,13 @@ class Graph {
   virtual ~Graph() = default;
 
   virtual void addNode(NodeType &node) = 0;
-  virtual bool addEdge(EdgeType &edge) = 0;
+  virtual void addEdge(EdgeType &edge) = 0;
+  virtual bool edgeExists(const EdgeType &edge) const = 0;
 
   [[nodiscard]]
-  virtual NodeType getNode(size_t node_id) const = 0;
+  virtual const NodeType& getNode(size_t node_id) const = 0;
   [[nodiscard]]
-  virtual EdgeType getEdge(size_t source, size_t target) const = 0;
+  virtual const EdgeType& getEdge(size_t source, size_t target) const = 0;
 
   [[nodiscard]]
   virtual size_t getNodesNumber() const = 0;
