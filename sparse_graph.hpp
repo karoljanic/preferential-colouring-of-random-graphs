@@ -88,7 +88,11 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
   std::vector<NodeType> getNeighbours(size_t node_id) const override {
 	std::vector<NodeType> neighbours;
 	for (const auto &edge : adjacency_list_[node_id]) {
-	  neighbours.emplace_back(nodes_[edge.target]);
+	  if(edge.source == node_id) {
+		neighbours.emplace_back(nodes_[edge.target]);
+	  } else {
+		neighbours.emplace_back(nodes_[edge.source]);
+	  }
 	}
 
 	return neighbours;

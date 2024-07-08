@@ -22,8 +22,8 @@ class ColorsBalanceLocallyPainter : public GraphPainter {
   [[nodiscard]]
   inline const std::map<std::string, size_t> &getColorsHistogram() const { return colors_histogram_; }
 
-  void paintNode(BAGraph &graph, BANode &node) override {}
-  void paintEdge(BAGraph &graph, BAEdge &edge) override;
+  void paintNode(BAGraph &/*graph*/, BANode &/*node*/) override {}
+  void paintEdge(BAGraph &/*graph*/, BAEdge &/*edge*/) override;
 
   void reset() override;
  private:

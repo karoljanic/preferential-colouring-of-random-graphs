@@ -24,22 +24,28 @@ class RandomGraphFactory {
   ~RandomGraphFactory() = default;
 
   [[nodiscard]]
-  static BAGraph createBarabasiAlbertWithPreferentialAttachment(size_t initial_nodes_number,
-																size_t final_nodes_number,
-																size_t edges_per_new_node_number,
-																float exponent_parameter,
-																GraphPainter* painter = nullptr);
+  static BAGraph createBarabasiAlbertWithPreferentialAttachmentRepeatedNodes(size_t initial_nodes_number,
+																			 size_t final_nodes_number,
+																			 size_t edges_per_new_node_number,
+																			 GraphPainter *painter = nullptr);
+
+  [[nodiscard]]
+  static BAGraph createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(size_t initial_nodes_number,
+																			   size_t final_nodes_number,
+																			   size_t edges_per_new_node_number,
+																			   GraphPainter *painter = nullptr);
+
   [[nodiscard]]
   static BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
 													   size_t final_nodes_number,
 													   size_t edges_per_new_node_number,
-													   GraphPainter* painter = nullptr);
+													   GraphPainter *painter = nullptr);
   [[nodiscard]]
   static BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
 													  size_t final_nodes_number,
 													  size_t edges_per_new_node_number,
 													  float copy_probability,
-													  GraphPainter* painter = nullptr);
+													  GraphPainter *painter = nullptr);
 };
 } // namespace graph::random
 
