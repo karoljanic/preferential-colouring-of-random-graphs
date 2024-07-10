@@ -1,9 +1,6 @@
 #include "random_graph_factory.hpp"
 
-#include <random>       // std::mt19937, std::random_device, std::uniform_real_distribution, std::uniform_int_distribution
 #include <stdexcept>    // std::invalid_argument
-
-#include <iostream>
 
 namespace graph::random {
 BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentRepeatedNodes(size_t initial_nodes_number,
@@ -25,43 +22,37 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentRepeat
   BAGraph graph;
   std::vector<size_t> repeated_nodes;
 
-  BANode central_node{};
-  painter->paintNode(graph, central_node);
-  graph.addNode(central_node);
+  size_t central_node_id = graph.addNode();
+  painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
-	BAEdge edge{node.id, central_node.id};
-	graph.addEdge(edge);
-	painter->paintEdge(graph, edge);
+	graph.addEdge(node_id, central_node_id);
+	painter->paintEdge(graph, graph.getEdge(node_id, central_node_id));
 
-	repeated_nodes.push_back(node.id);
-	repeated_nodes.push_back(central_node.id);
+	repeated_nodes.push_back(node_id);
+	repeated_nodes.push_back(central_node_id);
   }
 
-  std::mt19937 generator{std::random_device{}()};
   while (graph.getNodesNumber() < final_nodes_number) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
 	size_t edges_added{0};
 	std::vector<size_t> selected_nodes;
 	std::uniform_int_distribution<size_t> repeated_node_distribution{0, repeated_nodes.size() - 1};
 	while (edges_added < edges_per_new_node_number) {
-	  size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator)];
+	  size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator_)];
 	  if (std::find(selected_nodes.begin(), selected_nodes.end(), selected_node_id) == selected_nodes.end()) {
 		selected_nodes.push_back(selected_node_id);
-		BAEdge edge{node.id, selected_node_id};
-		if (!graph.edgeExists(edge)) {
-		  graph.addEdge(edge);
-		  painter->paintEdge(graph, edge);
+		if (!graph.edgeExists(node_id, selected_node_id)) {
+		  graph.addEdge(node_id, selected_node_id);
+		  painter->paintEdge(graph, graph.getEdge(node_id, selected_node_id));
 
 		  ++edges_added;
 
-		  repeated_nodes.push_back(node.id);
+		  repeated_nodes.push_back(node_id);
 		  repeated_nodes.push_back(selected_node_id);
 		}
 	  }
@@ -89,30 +80,22 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
 
   std::vector<size_t> nodes;
   nodes.reserve(2 * initial_nodes_number + 2 * (final_nodes_number - initial_nodes_number) * edges_per_new_node_number);
-
   std::vector<size_t> degrees(final_nodes_number, 0);
 
-  auto addEdge = [&](size_t u, size_t v) {
-	nodes.push_back(u);
-	nodes.push_back(v);
-	degrees[u]++;
-	degrees[v]++;
-  };
-
   BAGraph graph;
-  for(size_t v = 0; v < final_nodes_number; ++v) {
-	BANode node{};
-	graph.addNode(node);
+  for (size_t v = 0; v < final_nodes_number; ++v) {
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
   }
 
   // initialize n0 connected nodes
-  for (size_t v = 0; v < initial_nodes_number - 1; ++v) {
-	addEdge(v, v + 1);
+  for (size_t v = 0; v < initial_nodes_number; ++v) {
+	nodes.push_back(v);
+	nodes.push_back((v + 1) % initial_nodes_number);
+	degrees[v]++;
+	degrees[(v + 1) % initial_nodes_number]++;
   }
-  addEdge(0, initial_nodes_number - 1);
 
-
-  std::mt19937 generator{std::random_device{}()};
   for (size_t v = initial_nodes_number; v < final_nodes_number; ++v) {
 	// If we were to update the range in the next loop, the additionally available nodes
 	// would only lead to self-loops are multi-edges.
@@ -122,7 +105,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
 	for (size_t i = 0; i < edges_per_new_node_number; ++i) {
 	  // let's sample a new neighbor and repeat if we're already connected to it
 	  while (true) {
-		const auto randomIndex = dist(generator);
+		const auto randomIndex = dist(generator_);
 		const auto newNeighbor = nodes[randomIndex];
 
 		// the last 2*(i-1) positions contain all edges incident to v in to format
@@ -138,19 +121,19 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
 		}
 
 		if (!alreadyIncident) {
-		  addEdge(v, newNeighbor);
+		  nodes.push_back(v);
+		  nodes.push_back(newNeighbor);
+		  degrees[v]++;
+		  degrees[newNeighbor]++;
 		  break;
 		}
 	  }
 	}
   }
 
-  std::cout << "11\n";
-  std::cout << graph.getNodesNumber() << std::endl;
-
   for (size_t i = 0; i < nodes.size(); i += 2) {
-	BAEdge edge{.source = nodes[i], .target = nodes[i+1]};
-	graph.addEdge(edge);
+	graph.addEdge(nodes[i], nodes[i + 1]);
+	painter->paintEdge(graph, graph.getEdge(nodes[i], nodes[i + 1]));
   }
 
   return graph;
@@ -173,42 +156,36 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
   }
 
   BAGraph graph;
-  BANode central_node{};
-  painter->paintNode(graph, central_node);
-  graph.addNode(central_node);
+  size_t central_node_id = graph.addNode();
+  painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
-	BAEdge edge{node.id, central_node.id};
-	painter->paintEdge(graph, edge);
-	graph.addEdge(edge);
+	graph.addEdge(node_id, central_node_id);
+	painter->paintEdge(graph, graph.getEdge(node_id, central_node_id));
   }
 
-  std::mt19937 generator{std::random_device{}()};
   while (graph.getNodesNumber() < final_nodes_number) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
 	size_t edges_added{0};
 	while (edges_added < edges_per_new_node_number) {
 	  std::uniform_int_distribution<size_t> node_distribution{0, graph.getNodesNumber() - 1};
-	  const BANode rand_node = graph.getNode(node_distribution(generator));
-	  if (rand_node.id == node.id) {
+	  const BANode &rand_node = graph.getNode(node_distribution(generator_));
+	  if (rand_node.id == node_id) {
 		continue;
 	  }
 
-	  const std::vector<BANode> rand_node_neighbours = graph.getNeighbours(rand_node.id);
+	  const std::vector<BANode> &rand_node_neighbours = graph.getNeighbours(rand_node.id);
 	  std::uniform_int_distribution<size_t>
 		  neighbour_distribution{0, rand_node_neighbours.size() - 1};
-	  const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
+	  const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator_)];
 
-	  BAEdge edge{node.id, rand_neighbour.id};
-	  if (!graph.edgeExists(edge)) {
-		painter->paintEdge(graph, edge);
-		graph.addEdge(edge);
+	  if (!graph.edgeExists(node_id, rand_neighbour.id)) {
+		graph.addEdge(node_id, rand_neighbour.id);
+		painter->paintEdge(graph, graph.getEdge(node_id, rand_neighbour.id));
 		++edges_added;
 	  }
 	}
@@ -239,51 +216,44 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
   }
 
   BAGraph graph;
-  BANode central_node{};
-  painter->paintNode(graph, central_node);
-  graph.addNode(central_node);
+  size_t central_node_id = graph.addNode();
+  painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
-	BAEdge edge{node.id, central_node.id};
-	painter->paintEdge(graph, edge);
-	graph.addEdge(edge);
+	graph.addEdge(node_id, central_node_id);
+	painter->paintEdge(graph, graph.getEdge(node_id, central_node_id));
   }
 
-  std::mt19937 generator{std::random_device{}()};
   std::uniform_real_distribution<float> option_distribution{0.0F, 1.0F};
   while (graph.getNodesNumber() < final_nodes_number) {
-	BANode node{};
-	graph.addNode(node);
-	painter->paintNode(graph, node);
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
 
 	size_t edges_added{0};
 	while (edges_added < edges_per_new_node_number) {
 	  std::uniform_int_distribution<size_t> node_distribution{0, graph.getNodesNumber() - 1};
-	  const BANode rand_node = graph.getNode(node_distribution(generator));
-	  if (rand_node.id == node.id) {
+	  const BANode &rand_node = graph.getNode(node_distribution(generator_));
+	  if (rand_node.id == node_id) {
 		continue;
 	  }
 
-	  if (option_distribution(generator) < copy_probability) {
-		BAEdge edge{node.id, rand_node.id};
-		if (!graph.edgeExists(edge)) {
-		  painter->paintEdge(graph, edge);
-		  graph.addEdge(edge);
+	  if (option_distribution(generator_) < copy_probability) {
+		if (!graph.edgeExists(node_id, rand_node.id)) {
+		  graph.addEdge(node_id, rand_node.id);
+		  painter->paintEdge(graph, graph.getEdge(node_id, rand_node.id));
 		  ++edges_added;
 		}
 	  } else {
-		const std::vector<BANode> rand_node_neighbours = graph.getNeighbours(rand_node.id);
+		const std::vector<BANode> &rand_node_neighbours = graph.getNeighbours(rand_node.id);
 		std::uniform_int_distribution<size_t>
 			neighbour_distribution{0, rand_node_neighbours.size() - 1};
 
-		const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator)];
-		BAEdge edge{node.id, rand_neighbour.id};
-		if (!graph.edgeExists(edge)) {
-		  painter->paintEdge(graph, edge);
-		  graph.addEdge(edge);
+		const BANode &rand_neighbour = rand_node_neighbours[neighbour_distribution(generator_)];
+		if (!graph.edgeExists(node_id, rand_neighbour.id)) {
+		  graph.addEdge(node_id, rand_neighbour.id);
+		  painter->paintEdge(graph, graph.getEdge(node_id, rand_neighbour.id));
 		  ++edges_added;
 		}
 	  }

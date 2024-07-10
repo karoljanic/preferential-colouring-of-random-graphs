@@ -1,15 +1,15 @@
 #ifndef GRAPH_RANDOM_GRAPH_PAINTER_HPP
 #define GRAPH_RANDOM_GRAPH_PAINTER_HPP
 
-#include <vector>    // std::vector
+#include <vector>    		// std::vector
 
-#include "ba_graph.hpp"    // graph::random::BAGraph, graph::random::BANode, graph::random::BAEdge
+#include "ba_graph.hpp"    	// graph::random::BAGraph, graph::random::BANode, graph::random::BAEdge
 
 namespace graph::random {
 class GraphPainter {
  public:
   GraphPainter() = default;
-  GraphPainter(std::vector<std::string> nodes_colors, std::vector<std::string> edges_colors)
+  GraphPainter(std::vector<ColorType> nodes_colors, std::vector<ColorType> edges_colors)
 	  : nodes_colors_(std::move(nodes_colors)), edges_colors_(std::move(edges_colors)) {}
 
   GraphPainter(const GraphPainter &) = default;
@@ -31,8 +31,8 @@ class GraphPainter {
   virtual void reset() = 0;
 
  protected:
-  std::vector<std::string> nodes_colors_;
-  std::vector<std::string> edges_colors_;
+  std::vector<ColorType> nodes_colors_;
+  std::vector<ColorType> edges_colors_;
 };
 } // namespace graph::random
 

@@ -1,7 +1,7 @@
 #include "colors_balance_globally_painter.hpp"
 
 namespace graph::random {
-ColorsBalanceGloballyPainter::ColorsBalanceGloballyPainter(std::vector<std::string> edges_colors)
+ColorsBalanceGloballyPainter::ColorsBalanceGloballyPainter(std::vector<ColorType> edges_colors)
 	: GraphPainter({}, std::move(edges_colors)) {
   for (const auto &color : edges_colors_) {
 	colors_histogram_[color] = 0;
@@ -11,7 +11,7 @@ ColorsBalanceGloballyPainter::ColorsBalanceGloballyPainter(std::vector<std::stri
 void ColorsBalanceGloballyPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
   if (graph.getEdgesNumber() == 0) {
 	std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
-	std::string color = edges_colors_[distribution(generator_)];
+	ColorType color = edges_colors_[distribution(generator_)];
 	edge.color = color;
 	++colors_histogram_[color];
   } else {

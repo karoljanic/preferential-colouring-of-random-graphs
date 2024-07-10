@@ -9,8 +9,11 @@
 #include <map>          // std::map
 #include <queue>        // std::queue
 #include <stack>        // std::stack
+#include <stdexcept>    // std::invalid_argument
 #include <string>       // std::string
 #include <vector>       // std::vector
+
+#include <iostream>
 
 #include "graph.hpp"
 
@@ -28,40 +31,56 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
   ~SparseGraph() = default;
 
-  void addNode(NodeType &node) override {
-	node.id = nodes_.size();
-	nodes_.emplace_back(node);
-	adjacency_list_.emplace_back(std::vector<EdgeType>());
+  size_t addNode() override {
+	nodes_.emplace_back(NodeType{.id = nodes_.size()});
+	adjacency_list_.emplace_back();
+
+	return nodes_.size() - 1;
   }
 
-  void addEdge(EdgeType &edge) override {
-	if (edge.source > edge.target) {
-	  std::swap(edge.source, edge.target);
+  void addEdge(size_t node1_id, size_t node2_id) override {
+	EdgeType edge{};
+	if (node1_id < node2_id) {
+	  edge.source = node1_id;
+	  edge.target = node2_id;
+	} else {
+	  edge.source = node2_id;
+	  edge.target = node1_id;
 	}
 
-	adjacency_list_[edge.source].emplace_back(edge);
-	adjacency_list_[edge.target].emplace_back(edge);
+	adjacency_list_[node1_id].emplace_back(edges_.size());
+	adjacency_list_[node2_id].emplace_back(edges_.size());
+	edges_.emplace_back(edge);
   }
 
   [[nodiscard]]
-  bool edgeExists(const EdgeType &e) const override {
-	size_t source = e.source < e.target ? e.source : e.target;
-	size_t target = e.source < e.target ? e.target : e.source;
+  bool edgeExists(size_t node1_id, size_t node2_id) const override {
+	size_t source = node1_id < node2_id ? node1_id : node2_id;
+	size_t target = node1_id < node2_id ? node2_id : node1_id;
 
-	return std::find_if(adjacency_list_[source].begin(), adjacency_list_[source].end(),
-						[&target](const EdgeType &e) {
-						  return e.target == target;
-						}) != adjacency_list_[source].end();
+	return std::ranges::any_of(adjacency_list_[source], [&](size_t index) {
+	  return edges_[index].source == source && edges_[index].target == target;
+	});
   }
 
   [[nodiscard]]
-  const NodeType& getNode(size_t node_id) const override {
+  NodeType &getNode(size_t node_id) override {
 	return nodes_[node_id];
   }
 
   [[nodiscard]]
-  const EdgeType& getEdge(size_t source, size_t target) const override {
-	return adjacency_list_[source][target];
+  EdgeType &getEdge(size_t source, size_t target) override {
+	auto iter = std::find_if(adjacency_list_[source].begin(), adjacency_list_[source].end(), [&](size_t index) {
+	  return (edges_[index].source == source && edges_[index].target == target)
+		  || (edges_[index].source == target && edges_[index].target == source);
+	});
+
+	if (iter != adjacency_list_[source].end()) {
+	  return edges_[*iter];
+	}
+
+	throw std::invalid_argument(
+		"The edge (" + std::to_string(source) + "," + std::to_string(target) + ") does not exist!");
   }
 
   [[nodiscard]]
@@ -71,12 +90,7 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
   [[nodiscard]]
   size_t getEdgesNumber() const override {
-	size_t adjacency_list_number = 0;
-	for (const auto &node_edges : adjacency_list_) {
-	  adjacency_list_number += node_edges.size();
-	}
-
-	return adjacency_list_number / 2;
+	return edges_.size();
   }
 
   [[nodiscard]]
@@ -87,11 +101,11 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
   [[nodiscard]]
   std::vector<NodeType> getNeighbours(size_t node_id) const override {
 	std::vector<NodeType> neighbours;
-	for (const auto &edge : adjacency_list_[node_id]) {
-	  if(edge.source == node_id) {
-		neighbours.emplace_back(nodes_[edge.target]);
+	for (size_t index : adjacency_list_[node_id]) {
+	  if (edges_[index].source == node_id) {
+		neighbours.emplace_back(nodes_[edges_[index].target]);
 	  } else {
-		neighbours.emplace_back(nodes_[edge.source]);
+		neighbours.emplace_back(nodes_[edges_[index].source]);
 	  }
 	}
 
@@ -100,7 +114,14 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
   [[nodiscard]]
   std::vector<EdgeType> getAdjacentEdges(size_t node_id) const override {
-	return adjacency_list_[node_id];
+	std::vector<EdgeType> edges;
+	for (const EdgeType &edge : edges_) {
+	  if (edge.source == node_id || edge.target == node_id) {
+		edges.emplace_back(edge);
+	  }
+	}
+
+	return edges;
   }
 
   [[nodiscard]]
@@ -135,9 +156,16 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 		callback(nodes_[node_id]);
 		visited[node_id] = true;
 
-		for (const EdgeType &neighbor : adjacency_list_.at(node_id)) {
-		  if (!visited[neighbor.target]) {
-			stack.push(neighbor.target);
+		for (size_t neighbor_index : adjacency_list_.at(node_id)) {
+		  const EdgeType &neighbor = edges_[neighbor_index];
+		  if (neighbor_index == neighbor.source) {
+			if (!visited[neighbor.target]) {
+			  stack.push(neighbor.target);
+			}
+		  } else {
+			if (!visited[neighbor.source]) {
+			  stack.push(neighbor.source);
+			}
 		  }
 		}
 	  }
@@ -157,9 +185,16 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 		callback(nodes_[node_id]);
 		visited[node_id] = true;
 
-		for (const EdgeType &neighbor : adjacency_list_.at(node_id)) {
-		  if (!visited[neighbor.target]) {
-			queue.push(neighbor.target);
+		for (size_t neighbor_index : adjacency_list_.at(node_id)) {
+		  const EdgeType &neighbor = edges_[neighbor_index];
+		  if (neighbor_index == neighbor.source) {
+			if (!visited[neighbor.target]) {
+			  queue.push(neighbor.target);
+			}
+		  } else {
+			if (!visited[neighbor.source]) {
+			  queue.push(neighbor.source);
+			}
 		  }
 		}
 	  }
@@ -176,13 +211,8 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 	file << "    { }" << std::endl;
 
 	file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
-	for (size_t i = 0; i < getNodesNumber(); ++i) {
-	  for (size_t j = 0; j < adjacency_list_[i].size(); ++j) {
-		const EdgeType &edge = adjacency_list_[i][j];
-		if (edge.source == i) {
-		  file << "    {\"source\": " << edge.source << ", \"target\": " << edge.target << "}," << std::endl;
-		}
-	  }
+	for (size_t i = 0; i < getEdgesNumber(); ++i) {
+	  file << "    {\"source\": " << edges_[i].source << ", \"target\": " << edges_[i].target << "}," << std::endl;
 	}
 	file << "    { }" << std::endl;
 
@@ -203,15 +233,10 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 	file << "    { }" << std::endl;
 
 	file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
-	for (size_t i = 0; i < getNodesNumber(); ++i) {
-	  for (size_t j = 0; j < adjacency_list_[i].size(); ++j) {
-		const EdgeType &edge = adjacency_list_[i][j];
-		if (edge.source == i) {
-		  file << "    {\"source\": " << edge.source << ", \"target\": " << edge.target;
-		  edgeCallback(file, edge);
-		  file << "}," << std::endl;
-		}
-	  }
+	for (size_t i = 0; i < getEdgesNumber(); ++i) {
+	  file << "    {\"source\": " << edges_[i].source << ", \"target\": " << edges_[i].target;
+	  edgeCallback(file, edges_[i]);
+	  file << "}," << std::endl;
 	}
 	file << "    { }" << std::endl;
 
@@ -220,7 +245,8 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
  private:
   std::vector<NodeType> nodes_;
-  std::vector<std::vector<EdgeType>> adjacency_list_;
+  std::vector<EdgeType> edges_;
+  std::vector<std::vector<size_t>> adjacency_list_;
 };
 } // namespace graph
 

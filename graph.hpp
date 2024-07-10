@@ -1,7 +1,7 @@
 #ifndef GRAPH_GRAPH_HPP
 #define GRAPH_GRAPH_HPP
 
-#include <concepts>      // concepts
+#include <concepts>      // concept, requires, std::convertible_to
 #include <cstddef>       // std::size_t
 #include <functional>    // std::function
 #include <map>           // std::map
@@ -33,14 +33,15 @@ class Graph {
 
   virtual ~Graph() = default;
 
-  virtual void addNode(NodeType &node) = 0;
-  virtual void addEdge(EdgeType &edge) = 0;
-  virtual bool edgeExists(const EdgeType &edge) const = 0;
+  virtual size_t addNode() = 0;
+  virtual void addEdge(size_t node1_id, size_t node2_id) = 0;
+  [[nodiscard]]
+  virtual bool edgeExists(size_t node1_id, size_t node2_id) const = 0;
 
   [[nodiscard]]
-  virtual const NodeType& getNode(size_t node_id) const = 0;
+  virtual NodeType& getNode(size_t node_id) = 0;
   [[nodiscard]]
-  virtual const EdgeType& getEdge(size_t source, size_t target) const = 0;
+  virtual EdgeType& getEdge(size_t source, size_t target) = 0;
 
   [[nodiscard]]
   virtual size_t getNodesNumber() const = 0;

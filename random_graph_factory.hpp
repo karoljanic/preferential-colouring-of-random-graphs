@@ -3,12 +3,12 @@
 #ifndef GRAPH_RANDOM_GRAPH_FACTORY_HPP
 #define GRAPH_RANDOM_GRAPH_FACTORY_HPP
 
-#include <cstddef>            // std::size_t
-#include <memory>                // std::unique_ptr
-#include <string>            // std::string
+#include <cstddef>            	// std::size_t
+#include <memory>             	// std::unique_ptr
+#include <random>       		// std::mt19937, std::random_device, std::uniform_real_distribution, std::uniform_int_distribution
 
-#include "ba_graph.hpp"        // graph::random::BAGraph
-#include "graph_painter.hpp"    // graph::random::GraphPainter
+#include "ba_graph.hpp"       	// graph::random::BAGraph
+#include "graph_painter.hpp"  	// graph::random::GraphPainter
 
 namespace graph::random {
 class RandomGraphFactory {
@@ -24,28 +24,31 @@ class RandomGraphFactory {
   ~RandomGraphFactory() = default;
 
   [[nodiscard]]
-  static BAGraph createBarabasiAlbertWithPreferentialAttachmentRepeatedNodes(size_t initial_nodes_number,
-																			 size_t final_nodes_number,
-																			 size_t edges_per_new_node_number,
-																			 GraphPainter *painter = nullptr);
+  BAGraph createBarabasiAlbertWithPreferentialAttachmentRepeatedNodes(size_t initial_nodes_number,
+																	  size_t final_nodes_number,
+																	  size_t edges_per_new_node_number,
+																	  GraphPainter *painter = nullptr);
 
   [[nodiscard]]
-  static BAGraph createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(size_t initial_nodes_number,
-																			   size_t final_nodes_number,
-																			   size_t edges_per_new_node_number,
-																			   GraphPainter *painter = nullptr);
+  BAGraph createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(size_t initial_nodes_number,
+																		size_t final_nodes_number,
+																		size_t edges_per_new_node_number,
+																		GraphPainter *painter = nullptr);
 
   [[nodiscard]]
-  static BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
-													   size_t final_nodes_number,
-													   size_t edges_per_new_node_number,
-													   GraphPainter *painter = nullptr);
+  BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number,
+												size_t final_nodes_number,
+												size_t edges_per_new_node_number,
+												GraphPainter *painter = nullptr);
   [[nodiscard]]
-  static BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
-													  size_t final_nodes_number,
-													  size_t edges_per_new_node_number,
-													  float copy_probability,
-													  GraphPainter *painter = nullptr);
+  BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number,
+											   size_t final_nodes_number,
+											   size_t edges_per_new_node_number,
+											   float copy_probability,
+											   GraphPainter *painter = nullptr);
+
+ private:
+  std::mt19937 generator_{std::random_device{}()};
 };
 } // namespace graph::random
 

@@ -1,7 +1,7 @@
 #include "colors_balance_locally_painter.hpp"
 
 namespace graph::random {
-ColorsBalanceLocallyPainter::ColorsBalanceLocallyPainter(std::vector<std::string> edges_colors)
+ColorsBalanceLocallyPainter::ColorsBalanceLocallyPainter(std::vector<ColorType> edges_colors)
 	: GraphPainter({}, std::move(edges_colors)) {
   for (const auto &color : edges_colors_) {
 	colors_histogram_[color] = 0;
@@ -9,7 +9,7 @@ ColorsBalanceLocallyPainter::ColorsBalanceLocallyPainter(std::vector<std::string
 }
 
 void ColorsBalanceLocallyPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
-  std::map<std::string, size_t> local_colors_histogram{};
+  std::map<ColorType, size_t> local_colors_histogram{};
   for (const auto &edges_color : edges_colors_) {
 	local_colors_histogram[edges_color] = 0;
   }
@@ -26,7 +26,7 @@ void ColorsBalanceLocallyPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
 
   if (total == 0) {
 	std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
-	std::string color = edges_colors_[distribution(generator_)];
+	ColorType color = edges_colors_[distribution(generator_)];
 	edge.color = color;
 	++colors_histogram_[color];
   } else {
