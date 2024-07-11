@@ -41,7 +41,12 @@ class Graph {
   [[nodiscard]]
   virtual NodeType& getNode(size_t node_id) = 0;
   [[nodiscard]]
+  virtual NodeType& getLastAddedNode() = 0;
+
+  [[nodiscard]]
   virtual EdgeType& getEdge(size_t source, size_t target) = 0;
+  [[nodiscard]]
+  virtual EdgeType& getLastAddedEdge() = 0;
 
   [[nodiscard]]
   virtual size_t getNodesNumber() const = 0;

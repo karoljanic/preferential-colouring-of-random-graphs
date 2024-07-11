@@ -82,12 +82,6 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
   nodes.reserve(2 * initial_nodes_number + 2 * (final_nodes_number - initial_nodes_number) * edges_per_new_node_number);
   std::vector<size_t> degrees(final_nodes_number, 0);
 
-  BAGraph graph;
-  for (size_t v = 0; v < final_nodes_number; ++v) {
-	size_t node_id = graph.addNode();
-	painter->paintNode(graph, graph.getNode(node_id));
-  }
-
   // initialize n0 connected nodes
   for (size_t v = 0; v < initial_nodes_number; ++v) {
 	nodes.push_back(v);
@@ -131,10 +125,18 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
 	}
   }
 
+  BAGraph graph;
+  for(size_t i = 0; i < final_nodes_number; ++i) {
+	size_t node_id = graph.addNode();
+	painter->paintNode(graph, graph.getNode(node_id));
+  }
   for (size_t i = 0; i < nodes.size(); i += 2) {
 	graph.addEdge(nodes[i], nodes[i + 1]);
 	painter->paintEdge(graph, graph.getEdge(nodes[i], nodes[i + 1]));
   }
+
+  std::cout << "Nodes size: " << graph.getNodesNumber() << std::endl;
+  std::cout << "Edged size: " << graph.getEdgesNumber() << std::endl;
 
   return graph;
 }

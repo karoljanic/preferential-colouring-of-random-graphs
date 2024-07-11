@@ -37,6 +37,9 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
 
   typedef std::map<size_t, std::map<size_t, Metric>> MetricsMap;
 
+  static constexpr size_t K33_MAX_DEG{3};
+  static constexpr size_t K5_MAX_DEG{4};
+
   std::mt19937 generator_{std::random_device{}()};
   std::map<ColorType, BAGraph> embeddings_;
   std::map<ColorType, MetricsMap> metrics_map_;
@@ -47,13 +50,19 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
   static void updateAllPathsMetricSmart(BAGraph &graph, MetricsMap &metrics_map);
   static void updateShortestPathsMetric(BAGraph &graph, MetricsMap &metrics_map);
 
-  static void normalizeMetric(std::vector<Metric> &metric);
-
   [[nodiscard]]
   static Metric sumMetric(MetricsMap &metrics_map);
 
+  template<size_t MAX_DEG>
   [[nodiscard]]
-  static float calculatePathImpact(BAGraph &graph, std::vector<size_t> &path, int max_degree);
+  static float calculatePathImpact(BAGraph &graph, std::vector<size_t> &path);
+
+  [[nodiscard]]
+  static float phi(size_t k);
+
+  template<size_t MAX_DEG>
+  [[nodiscard]]
+  static float psi(size_t k);
 };
 } // namespace graph::random
 

@@ -69,6 +69,11 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
   }
 
   [[nodiscard]]
+  NodeType &getLastAddedNode() override {
+	return nodes_.back();
+  }
+
+  [[nodiscard]]
   EdgeType &getEdge(size_t source, size_t target) override {
 	auto iter = std::find_if(adjacency_list_[source].begin(), adjacency_list_[source].end(), [&](size_t index) {
 	  return (edges_[index].source == source && edges_[index].target == target)
@@ -81,6 +86,11 @@ class SparseGraph : public Graph<NodeType, EdgeType> {
 
 	throw std::invalid_argument(
 		"The edge (" + std::to_string(source) + "," + std::to_string(target) + ") does not exist!");
+  }
+
+  [[nodiscard]]
+  EdgeType &getLastAddedEdge() override {
+	return edges_.back();
   }
 
   [[nodiscard]]

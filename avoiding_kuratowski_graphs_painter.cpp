@@ -34,8 +34,6 @@ void AvoidingKuratowskiGraphsPainter::paintNode(BAGraph &graph, BANode &node) {
 void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
   auto start_coloring = std::chrono::high_resolution_clock::now();
 
-  std::cout << "Painting edge: " << edge.source << " " << edge.target << std::endl;
-
   std::map<ColorType, float> metrics;
   for (const auto &edges_color : edges_colors_) {
 	BAGraph embedding_copy{embeddings_[edges_color]};
@@ -72,6 +70,8 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
   auto end_coloring = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_coloring - start_coloring);
   coloring_times_vector_.emplace_back(graph.getEdgesNumber(), duration.count());
+
+  std::cout << "Painting edge: " << edge.source << " " << edge.target << " to " << max_colors[index].hex << std::endl;
 }
 
 void AvoidingKuratowskiGraphsPainter::reset() {}
@@ -95,11 +95,11 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(
 	  paths.pop();
 	  size_t last = path.back();
 
-	  float k33_factor = calculatePathImpact(graph, path, 3) * 0.5F;
+	  float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
 	  metrics_map[path.front()][path.back()].k33 += k33_factor;
 	  metrics_map[path.back()][path.front()].k33 += k33_factor;
 
-	  float k5_factor = calculatePathImpact(graph, path, 4) * 0.5F;
+	  float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
 	  metrics_map[path.front()][path.back()].k5 += k5_factor;
 	  metrics_map[path.back()][path.front()].k5 += k5_factor;;
 
@@ -116,7 +116,57 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(
 
 void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(
 	BAGraph &graph, AvoidingKuratowskiGraphsPainter::MetricsMap &metrics_map) {
+  MetricsMap new_metrics_map{metrics_map};
+  size_t mm_size{metrics_map.size()};
 
+  BAEdge &last_added_edge = graph.getLastAddedEdge(); // source is added earlier than target
+  size_t source{last_added_edge.target};
+  size_t target{last_added_edge.source};
+
+  std::cout << "New edge: " << source << " -> " << target << std::endl;
+
+  std::vector<BANode> source_neighbours = graph.getNeighbours(source);
+  std::vector<BANode> target_neighbours = graph.getNeighbours(target);
+
+  std::cout << "Source(" << source << ")" << " neighbours: " << source_neighbours.size() << std::endl;
+  std::cout << "Target(" << target << ")" << " neighbours: " << target_neighbours.size() << std::endl;
+  std::cout << std::endl;
+
+  if (source_neighbours.size() == 1 && target_neighbours.size() == 1) {
+	float k33 = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
+	float k5 = psi<K5_MAX_DEG>(1) * psi<K5_MAX_DEG>(1);
+
+	new_metrics_map[source][target].k33 = k33;
+	new_metrics_map[target][source].k33 = k33;
+	new_metrics_map[source][target].k5 = k5;
+	new_metrics_map[target][source].k5 = k5;
+  } else if (source_neighbours.size() == 1) {
+	// update earlier calculated metrics of paths ended with target
+
+
+	// expand metric for paths ended in target to source node
+	for (size_t node = 0; node < mm_size; ++node) {
+	  if (node == target || node == source) {
+		continue;
+	  }
+
+	  float val = metrics_map[node][target].k33
+		  / psi<K33_MAX_DEG>(graph.getDegree(target) - 1)
+		  * psi<K33_MAX_DEG>(graph.getDegree(source))
+		  * phi(graph.getDegree(target));
+	  new_metrics_map[node][source].k33 += val;
+	  new_metrics_map[source][node].k33 += val;
+	}
+
+	// expand metric for path source -> target
+	float val = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
+	new_metrics_map[source][target].k33 += val;
+	new_metrics_map[target][source].k33 += val;
+  } else {
+
+  }
+
+  metrics_map = std::move(new_metrics_map);
 }
 
 void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(
@@ -162,11 +212,11 @@ void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(
 		size_t last = path.back();
 
 		if (last == source) {
-		  float k33_factor = calculatePathImpact(graph, path, 3) * 0.5F;
+		  float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
 		  metrics_map[path.front()][path.back()].k33 += k33_factor;
 		  metrics_map[path.back()][path.front()].k33 += k33_factor;
 
-		  float k5_factor = calculatePathImpact(graph, path, 4) * 0.5F;
+		  float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
 		  metrics_map[path.front()][path.back()].k5 += k5_factor;
 		  metrics_map[path.back()][path.front()].k5 += k5_factor;
 		} else {
@@ -178,21 +228,6 @@ void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(
 		}
 	  }
 	}
-  }
-}
-
-void AvoidingKuratowskiGraphsPainter::normalizeMetric(std::vector<Metric> &metrics) {
-  float k33_sum{0.0F};
-  float k5_sum{0.0F};
-
-  for (const auto &metric : metrics) {
-	k33_sum += metric.k33;
-	k5_sum += metric.k5;
-  }
-
-  for (auto &metric : metrics) {
-	metric.k33 /= k33_sum;
-	metric.k5 /= k5_sum;
   }
 }
 
@@ -211,26 +246,44 @@ AvoidingKuratowskiGraphsPainter::sumMetric(AvoidingKuratowskiGraphsPainter::Metr
   return {.k33 = k33, .k5 = k5};
 }
 
+template<size_t MAX_DEG>
 float AvoidingKuratowskiGraphsPainter::calculatePathImpact(BAGraph &graph,
-															 std::vector<size_t> &path,
-															 int max_degree) {
+														   std::vector<size_t> &path) {
   if (path.size() < 2) {
 	return 0;
   }
 
-  size_t in_deg{graph.getDegree(path.front())};
-  size_t out_deg{graph.getDegree(path.back())};
-
   float result{1.0F};
-  result *= static_cast<float>(std::min<size_t>(max_degree, in_deg)) / static_cast<float>(max_degree);
-  result *= static_cast<float>(std::min<size_t>(max_degree, out_deg)) / static_cast<float>(max_degree);
+  result *= psi<MAX_DEG>(graph.getDegree(path.front()));
+  result *= psi<MAX_DEG>(graph.getDegree(path.back()));
 
   for (size_t i = 1; i < (path.size() - 1); ++i) {
-	float factor{1.0F / static_cast<float>(graph.getDegree(path.at(i)) - 1)};
-	result *= factor;
+	result *= phi(graph.getDegree(path.at(i)));
   }
 
   return result;
+}
+
+float AvoidingKuratowskiGraphsPainter::phi(size_t k) {
+//  if (k < 2) {
+//	return 1;
+//  }
+//
+//  return 2.0F / static_cast<float>(k * (k - 1));
+
+//    return 1;
+
+  if (k < 2) {
+	return 1;
+  }
+
+  return 1.0F / static_cast<float>(k - 1); // TODO: change to 1 / (k choose 2)
+}
+
+template<size_t MAX_DEG>
+float AvoidingKuratowskiGraphsPainter::psi(size_t k) {
+  return static_cast<float>(k) / static_cast<float>(MAX_DEG);
+//  return static_cast<float>(std::min(k, MAX_DEG)) / static_cast<float>(MAX_DEG);
 }
 
 } // namespace graph::random
