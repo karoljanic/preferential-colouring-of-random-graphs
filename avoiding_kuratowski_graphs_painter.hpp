@@ -1,11 +1,11 @@
 #ifndef GRAPH_RANDOM_AVOIDING_KURATOWSKI_GRAPHS_PAINTER_HPP
 #define GRAPH_RANDOM_AVOIDING_KURATOWSKI_GRAPHS_PAINTER_HPP
 
-#include <iostream>                // std::cout
-#include <random>                // std::mt19937, std::random_device, std::uniform_real_distribution, std::uniform_int_distribution
-#include <utility>                // std::pair
+#include <iostream>  // std::cout
+#include <random>    // std::mt19937, std::random_device, std::uniform_real_distribution, std::uniform_int_distribution
+#include <utility>   // std::pair
 
-#include "graph_painter.hpp"    // graph::random::GraphPainter
+#include "graph_painter.hpp"  // graph::random::GraphPainter
 
 namespace graph::random {
 class AvoidingKuratowskiGraphsPainter : public GraphPainter {
@@ -13,26 +13,25 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
   AvoidingKuratowskiGraphsPainter() = default;
   explicit AvoidingKuratowskiGraphsPainter(std::vector<ColorType> edges_colors);
 
-  AvoidingKuratowskiGraphsPainter(const AvoidingKuratowskiGraphsPainter &) = default;
-  AvoidingKuratowskiGraphsPainter(AvoidingKuratowskiGraphsPainter &&) = default;
+  AvoidingKuratowskiGraphsPainter(const AvoidingKuratowskiGraphsPainter&) = default;
+  AvoidingKuratowskiGraphsPainter(AvoidingKuratowskiGraphsPainter&&) = default;
 
-  AvoidingKuratowskiGraphsPainter &operator=(const AvoidingKuratowskiGraphsPainter &) = default;
-  AvoidingKuratowskiGraphsPainter &operator=(AvoidingKuratowskiGraphsPainter &&) = default;
+  AvoidingKuratowskiGraphsPainter& operator=(const AvoidingKuratowskiGraphsPainter&) = default;
+  AvoidingKuratowskiGraphsPainter& operator=(AvoidingKuratowskiGraphsPainter&&) = default;
 
   ~AvoidingKuratowskiGraphsPainter() override = default;
 
-  void paintNode(BAGraph &graph, BANode &node) override;
-  void paintEdge(BAGraph &graph, BAEdge &edge) override;
+  void paintNode(BAGraph& graph, BANode& node) override;
+  void paintEdge(BAGraph& graph, BAEdge& edge) override;
 
-  [[nodiscard]]
-  const std::map<ColorType, BAGraph> &getEmbeddings() const { return embeddings_; }
+  [[nodiscard]] const std::map<ColorType, BAGraph>& getEmbeddings() const { return embeddings_; }
 
   void reset() override;
 
-// private:
+  // private:
   struct Metric {
-	float k33{0.0F};
-	float k5{0.0F};
+    float k33{0.0F};
+    float k5{0.0F};
   };
 
   typedef std::map<size_t, std::map<size_t, Metric>> MetricsMap;
@@ -46,24 +45,20 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
 
   std::vector<std::pair<size_t, size_t>> coloring_times_vector_;
 
-  static void updateAllPathsMetric(BAGraph &graph, MetricsMap &metrics_map);
-  static void updateAllPathsMetricSmart(BAGraph &graph, MetricsMap &metrics_map);
-  static void updateShortestPathsMetric(BAGraph &graph, MetricsMap &metrics_map);
+  static void updateAllPathsMetric(BAGraph& graph, MetricsMap& metrics_map);
+  static void updateAllPathsMetricSmart(BAGraph& graph, MetricsMap& metrics_map);
+  static void updateShortestPathsMetric(BAGraph& graph, MetricsMap& metrics_map);
 
-  [[nodiscard]]
-  static Metric sumMetric(MetricsMap &metrics_map);
+  [[nodiscard]] static Metric sumMetric(MetricsMap& metrics_map);
 
-  template<size_t MAX_DEG>
-  [[nodiscard]]
-  static float calculatePathImpact(BAGraph &graph, std::vector<size_t> &path);
+  template <size_t MAX_DEG>
+  [[nodiscard]] static float calculatePathImpact(BAGraph& graph, std::vector<size_t>& path);
 
-  [[nodiscard]]
-  static float phi(size_t k);
+  [[nodiscard]] static float phi(size_t k);
 
-  template<size_t MAX_DEG>
-  [[nodiscard]]
-  static float psi(size_t k);
+  template <size_t MAX_DEG>
+  [[nodiscard]] static float psi(size_t k);
 };
-} // namespace graph::random
+}  // namespace graph::random
 
-#endif // GRAPH_RANDOM_AVOIDING_KURATOWSKI_GRAPHS_PAINTER_HPP
+#endif  // GRAPH_RANDOM_AVOIDING_KURATOWSKI_GRAPHS_PAINTER_HPP

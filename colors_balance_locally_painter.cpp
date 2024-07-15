@@ -2,54 +2,55 @@
 
 namespace graph::random {
 ColorsBalanceLocallyPainter::ColorsBalanceLocallyPainter(std::vector<ColorType> edges_colors)
-	: GraphPainter({}, std::move(edges_colors)) {
-  for (const auto &color : edges_colors_) {
-	colors_histogram_[color] = 0;
+    : GraphPainter({}, std::move(edges_colors)) {
+  for (const auto& color : edges_colors_) {
+    colors_histogram_[color] = 0;
   }
 }
 
-void ColorsBalanceLocallyPainter::paintEdge(BAGraph &graph, BAEdge &edge) {
+void ColorsBalanceLocallyPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
   std::map<ColorType, size_t> local_colors_histogram{};
-  for (const auto &edges_color : edges_colors_) {
-	local_colors_histogram[edges_color] = 0;
+  for (const auto& edges_color : edges_colors_) {
+    local_colors_histogram[edges_color] = 0;
   }
 
   size_t total{0};
-  for (const auto &adjacent_edge : graph.getAdjacentEdges(edge.source)) {
-	++local_colors_histogram[adjacent_edge.color];
-	++total;
+  for (const auto& adjacent_edge : graph.getAdjacentEdges(edge.source)) {
+    ++local_colors_histogram[adjacent_edge.color];
+    ++total;
   }
-  for (const auto &adjacent_edge : graph.getAdjacentEdges(edge.target)) {
-	++local_colors_histogram[adjacent_edge.color];
-	++total;
+  for (const auto& adjacent_edge : graph.getAdjacentEdges(edge.target)) {
+    ++local_colors_histogram[adjacent_edge.color];
+    ++total;
   }
 
   if (total == 0) {
-	std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
-	ColorType color = edges_colors_[distribution(generator_)];
-	edge.color = color;
-	++colors_histogram_[color];
-  } else {
-	std::uniform_real_distribution<float> distribution{0.0F, 1.0F};
-	float r = distribution(generator_);
-	float cumulative_probability = 0.0F;
-	for (const auto &color : edges_colors_) {
-	  float probability = static_cast<float>(total - local_colors_histogram[color]) /
-		  static_cast<float>((edges_colors_.size() - 1) * total);
-	  cumulative_probability += probability;
+    std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
+    ColorType color = edges_colors_[distribution(generator_)];
+    edge.color = color;
+    ++colors_histogram_[color];
+  }
+  else {
+    std::uniform_real_distribution<float> distribution{0.0F, 1.0F};
+    float r = distribution(generator_);
+    float cumulative_probability = 0.0F;
+    for (const auto& color : edges_colors_) {
+      float probability =
+          static_cast<float>(total - local_colors_histogram[color]) / static_cast<float>((edges_colors_.size() - 1) * total);
+      cumulative_probability += probability;
 
-	  if (r < cumulative_probability) {
-		edge.color = color;
-		++colors_histogram_[color];
-		return;
-	  }
-	}
+      if (r < cumulative_probability) {
+        edge.color = color;
+        ++colors_histogram_[color];
+        return;
+      }
+    }
   }
 }
 
 void ColorsBalanceLocallyPainter::reset() {
-  for (auto &[color, count] : colors_histogram_) {
-	count = 0;
+  for (auto& [color, count] : colors_histogram_) {
+    count = 0;
   }
 }
-} // namespace graph::random
+}  // namespace graph::random

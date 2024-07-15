@@ -6,7 +6,9 @@
 #include "sparse_graph.hpp"
 
 namespace graph::random {
-typedef struct ColorType { char hex[8]; } ColorType;
+typedef struct ColorType {
+  char hex[8];
+} ColorType;
 
 static bool operator<(const ColorType& lhs, const ColorType& rhs) {
   return std::strncmp(lhs.hex, rhs.hex, sizeof(lhs.hex)) < 0;
@@ -24,6 +26,6 @@ struct BAEdge {
 };
 
 typedef SparseGraph<BANode, BAEdge> BAGraph;
-} // namespace graph::random
+}  // namespace graph::random
 
-#endif // GRAPH_RANDOM_BA_GRAPH_HPP
+#endif  // GRAPH_RANDOM_BA_GRAPH_HPP

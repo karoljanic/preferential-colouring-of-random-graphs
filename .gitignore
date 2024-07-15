@@ -1,2 +1,6 @@
 .idea
 cmake-build-debug
+build
+generategraph
+graph.json
+*.pkl
