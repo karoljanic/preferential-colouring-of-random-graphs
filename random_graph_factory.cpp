@@ -70,7 +70,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
     throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
   }
 
-  if (initial_nodes_number < 2 || initial_nodes_number > final_nodes_number) {
+  if (initial_nodes_number < 1 || initial_nodes_number > final_nodes_number) {
     throw std::invalid_argument("Initial nodes number must be greater than 0 and less than final nodes number");
   }
 
@@ -130,6 +130,35 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
   if (painter != nullptr) {
     painter->paintNode(graph, graph.getNode(node_id));
   }
+
+  // sort nodes[2k+1] in ascending order of degrees
+  size_t last_index{0};
+  for (size_t i = 0; i < nodes.size(); i += 2) {
+    if (nodes[last_index] < nodes[i]) {
+      std::vector<size_t> ends_copy{};
+      for (size_t j = last_index; j < i; j += 2) {
+        ends_copy.push_back(nodes[j + 1]);
+      }
+
+      std::sort(ends_copy.begin(), ends_copy.end());
+      for (size_t j = 0; j < ends_copy.size(); ++j) {
+        nodes[last_index + 2 * j + 1] = ends_copy[j];
+      }
+
+      last_index = i;
+    }
+  }
+
+  std::vector<size_t> ends_copy{};
+  for (size_t j = last_index; j < nodes.size(); j += 2) {
+    ends_copy.push_back(nodes[j + 1]);
+  }
+
+  std::sort(ends_copy.begin(), ends_copy.end());
+  for (size_t j = 0; j < ends_copy.size(); ++j) {
+    nodes[last_index + 2 * j + 1] = ends_copy[j];
+  }
+
   for (size_t i = 0; i < nodes.size(); i += 2) {
     while (node_id < nodes[i] || node_id < nodes[i + 1]) {
       node_id = graph.addNode();
