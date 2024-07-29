@@ -22,14 +22,7 @@
    "languageId": "wolfram",
    "outputs": [],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722093906028,
-     "endTime": 1722093906091
-    },
-    "executionOrder": 457,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 2,
@@ -89,14 +82,7 @@
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722093906091,
-     "endTime": 1722093906914
-    },
-    "executionOrder": 458,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 1,
@@ -165,14 +151,7 @@
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722096193128,
-     "endTime": 1722096193900
-    },
-    "executionOrder": 522,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 1,
@@ -325,14 +304,7 @@
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722096171537,
-     "endTime": 1722096173160
-    },
-    "executionOrder": 504,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 1,
@@ -366,22 +338,15 @@
        "mime": "text/plain"
       }
      ],
-     "id": "972f7350-787b-4bb5-82d6-6bbbdc258e49",
+     "id": "dc6c2723-ffc5-420e-8d84-a9f583e3f552",
      "metadata": {
-      "cellLabel": "Out[495]= ",
+      "cellLabel": "Out[1863]= ",
       "isBoxData": false
      }
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722093909304,
-     "endTime": 1722093909550
-    },
-    "executionOrder": 493,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 2,
@@ -416,9 +381,9 @@
        "mime": "text/plain"
       }
      ],
-     "id": "2d23570e-da84-4d56-a2d6-0feef41697de",
+     "id": "e4866a2f-0c17-4247-80ba-07604b4b9b55",
      "metadata": {
-      "cellLabel": "Out[500]= ",
+      "cellLabel": "Out[1871]= ",
       "isBoxData": false
      }
     },
@@ -441,14 +406,7 @@
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722093909550,
-     "endTime": 1722093910089
-    },
-    "executionOrder": 496,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 2,
@@ -466,22 +424,15 @@
        "mime": "text/plain"
       }
      ],
-     "id": "e0104ca5-fb46-4d8a-a4a2-5e1d77c048f7",
+     "id": "09b6d988-5c10-4e8e-b22e-5b0532e46c08",
      "metadata": {
-      "cellLabel": "Out[502]= ",
+      "cellLabel": "Out[1873]= ",
       "isBoxData": false
      }
     }
    ],
    "metadata": {},
-   "executionSummary": {
-    "timing": {
-     "startTime": 1722093910089,
-     "endTime": 1722093910214
-    },
-    "executionOrder": 502,
-    "success": true
-   }
+   "executionSummary": {}
   },
   {
    "kind": 2,
@@ -499,9 +450,35 @@
        "mime": "text/plain"
       }
      ],
-     "id": "e7c2725e-cc88-4f1e-866c-4d9241eceaae",
+     "id": "9b987195-11d6-4457-ad29-840cb86f3951",
      "metadata": {
-      "cellLabel": "Out[503]= ",
+      "cellLabel": "Out[1874]= ",
+      "isBoxData": false
+     }
+    }
+   ],
+   "metadata": {},
+   "executionSummary": {}
+  },
+  {
+   "kind": 2,
+   "value": "FullSimplify[Binomial[k, 5] * Binomial[k-5-10+1, 10-1]*(k-5)!]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><wrow><w></w><wfrac><w><w>1</w></w><w><w></w><w><w>120</w></w></w></wfrac><w></w><wrow><w></w><w>Binomial</w><wrow><w></w><wb>[</wb><wrow><w></w><wrow><w></w><wrow><w></w><w>-</w><w>14</w></wrow><w>+</w><w>k</w></wrow><w>,</w><w>9</w></wrow><wb>]</wb></wrow></wrow><w></w><wrow><w></w><w>Gamma</w><wrow><w></w><wb>[</wb><wrow><w></w><w>1</w><w>+</w><w>k</w></wrow><wb>]</wb></wrow></wrow></wrow></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "(Binomial[-14 + k, 9]*Gamma[1 + k])/120",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "c0c491fd-e773-46ae-94cc-07b3c8763743",
+     "metadata": {
+      "cellLabel": "Out[5]= ",
       "isBoxData": false
      }
     }
@@ -509,11 +486,25 @@
    "metadata": {},
    "executionSummary": {
     "timing": {
-     "startTime": 1722093910215,
-     "endTime": 1722093910453
+     "startTime": 1722167882624,
+     "endTime": 1722167882624
     },
-    "executionOrder": 503,
-    "success": true
+    "success": false
+   }
+  },
+  {
+   "kind": 2,
+   "value": "DiscretePlot[Binomial[k, 5] * Binomial[k-5-10+1, 10-1]*(k-5)!, {k, 1, 1000, 10}]",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {},
+   "executionSummary": {
+    "timing": {
+     "startTime": 1722167853159,
+     "endTime": 1722167864233
+    },
+    "executionOrder": 6,
+    "success": false
    }
   }
  ]
