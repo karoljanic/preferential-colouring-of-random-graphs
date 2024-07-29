@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  27 JUL 2024 18:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  29 JUL 2024 22:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -691,7 +691,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plit.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plit.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}]
 Underfull \hbox (badness 3954) in paragraph at lines 70--70
 $\U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] = [] \U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] 
  []
@@ -769,7 +769,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 174--177
  []
 
 [4]
-<../k5.png, id=146, 402.5439pt x 328.8285pt>
+<../k5.png, id=170, 402.5439pt x 328.8285pt>
 File: ../k5.png Graphic file (type png)
 <use ../k5.png>
 Package pdftex.def Info: ../k5.png  used on input line 188.
@@ -782,311 +782,401 @@ Overfull \hbox (24.88582pt too wide) in paragraph at lines 188--189
 [5 <../k5.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 193.
+(hyperref)                removing `math shift' on input line 194.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 193.
+(hyperref)                removing `math shift' on input line 194.
 
 
-Overfull \hbox (8.6893pt too wide) in paragraph at lines 198--199
-[]| $\OML/plm/m/it/10 E\OT4/cmr/m/n/10 (\OML/plm/m/it/10 H[]\OT4/cmr/m/n/10 ) = \OMS/plsy/m/n/10 f\OT4/cmr/m/n/10 (\OML/plm/m/it/10 p[]; a[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; \OT4/cmr/m/n/10 (\OML/plm/m/it/10 p[]; b[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; \OT4/cmr/m/n/10 (\OML/plm/m/it/10 p[]; c[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; \OT4/cmr/m/n/10 (\OML/plm/m/it/10 o[]; a[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; \OT4/cmr/m/n/10 (\OML/plm/m/it/10 o[]; b[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; \OT4/cmr/m/n/10 (\OML/plm/m/it/10 o[]; c[]\OT4/cmr/m/n/10 )\OML/plm/m/it/10 ; [] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 207--209
+Underfull \hbox (badness 10000) in paragraph at lines 208--210
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--221
+Underfull \hbox (badness 10000) in paragraph at lines 222--222
 $\U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] = [] \U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--221
+Underfull \hbox (badness 10000) in paragraph at lines 222--222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 $\U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] = [] \U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--221
+Underfull \hbox (badness 10000) in paragraph at lines 222--222
 $[] \OT4/cmr/m/n/10 = [] \U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 221--221
+Underfull \hbox (badness 10000) in paragraph at lines 222--222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 \OT4/cmr/m/n/10 = [] [] #\OML/plm/m/it/10 K[] |  \OMS/plsy/m/n/10 ^^A \OML/plm/m/it/10 p[]|$ 
  []
 
 
-Underfull \hbox (badness 10000) detected at line 221
+Underfull \hbox (badness 10000) detected at line 222
 $[] \OT4/cmr/m/n/10 = [] \U/msb/m/n/10 E\OT4/cmr/m/n/10 [\OML/plm/m/it/10 K[]\OT4/cmr/m/n/10 ] 
  []
 
 [6]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 227.
+(hyperref)                removing `math shift' on input line 226.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 227.
+(hyperref)                removing `math shift' on input line 226.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 227.
+(hyperref)                removing `math shift' on input line 226.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 227.
+(hyperref)                removing `math shift' on input line 226.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 274.
+(hyperref)                removing `math shift' on input line 273.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 274.
+(hyperref)                removing `math shift' on input line 273.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 277.
+(hyperref)                removing `math shift' on input line 276.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 277.
+(hyperref)                removing `math shift' on input line 276.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 277.
+(hyperref)                removing `math shift' on input line 276.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 277.
+(hyperref)                removing `math shift' on input line 276.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 285.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 285.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 285.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 286.
+(hyperref)                removing `math shift' on input line 285.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 300.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 300.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 300.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 301.
+(hyperref)                removing `math shift' on input line 300.
 
 [7]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 310.
+(hyperref)                removing `math shift' on input line 308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 310.
+(hyperref)                removing `math shift' on input line 308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 310.
+(hyperref)                removing `math shift' on input line 308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 310.
+(hyperref)                removing `math shift' on input line 308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 319.
+(hyperref)                removing `math shift' on input line 316.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 319.
+(hyperref)                removing `math shift' on input line 316.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 319.
+(hyperref)                removing `math shift' on input line 316.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 319.
+(hyperref)                removing `math shift' on input line 316.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 332.
+(hyperref)                removing `math shift' on input line 329.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 332.
+(hyperref)                removing `math shift' on input line 329.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 332.
+(hyperref)                removing `math shift' on input line 329.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 332.
+(hyperref)                removing `math shift' on input line 329.
 
 [8]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 345.
+(hyperref)                removing `math shift' on input line 342.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 345.
+(hyperref)                removing `math shift' on input line 342.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 345.
+(hyperref)                removing `math shift' on input line 342.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 345.
+(hyperref)                removing `math shift' on input line 342.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 358.
+(hyperref)                removing `math shift' on input line 355.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 358.
+(hyperref)                removing `math shift' on input line 355.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 358.
+(hyperref)                removing `math shift' on input line 355.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 358.
+(hyperref)                removing `math shift' on input line 355.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 371.
+(hyperref)                removing `math shift' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 371.
+(hyperref)                removing `math shift' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 371.
+(hyperref)                removing `math shift' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 371.
+(hyperref)                removing `math shift' on input line 368.
 
 [9]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 384.
+(hyperref)                removing `math shift' on input line 381.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 384.
+(hyperref)                removing `math shift' on input line 381.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 384.
+(hyperref)                removing `math shift' on input line 381.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 384.
+(hyperref)                removing `math shift' on input line 381.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 398.
+(hyperref)                removing `math shift' on input line 395.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 398.
+(hyperref)                removing `math shift' on input line 395.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 406.
+(hyperref)                removing `math shift' on input line 403.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 406.
+(hyperref)                removing `math shift' on input line 403.
 
 [10]
-Underfull \hbox (badness 10000) in paragraph at lines 413--416
+Underfull \hbox (badness 10000) in paragraph at lines 410--413
 
  []
 
-[11] [12]
+[11]
+<../k33.png, id=205, 414.8298pt x 328.8285pt>
+File: ../k33.png Graphic file (type png)
+<use ../k33.png>
+Package pdftex.def Info: ../k33.png  used on input line 424.
+(pdftex.def)             Requested size: 369.88582pt x 293.2134pt.
+
+Overfull \hbox (24.88582pt too wide) in paragraph at lines 424--425
+ [][] 
+ []
+
+[12 <../k33.png>]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 432.
+(hyperref)                removing `math shift' on input line 430.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 432.
+(hyperref)                removing `math shift' on input line 430.
 
-[13] (./kuratowskis-expected-number.aux)
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 435.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 435.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 435.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 435.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 448.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 448.
+
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 469--475
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 481--481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+
+Underfull \hbox (badness 2512) in paragraph at lines 481--481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+
+Underfull \hbox (badness 2512) detected at line 481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+
+Underfull \hbox (badness 2512) detected at line 481
+\OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
+ []
+
+[14]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 495.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 495.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 503.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 503.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 505.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 505.
+
+[15] (./kuratowskis-expected-number.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `kuratowskis-expected-number.out' has not changed.
-(rerunfilecheck)             Checksum: F19340120A88783996C153F40DAD1F3E;6473.
+(rerunfilecheck)             Checksum: D45855853461C7C6358DF5C7CDC0D6DA;8040.
  ) 
 Here is how much of TeX's memory you used:
- 21595 strings out of 476041
- 394680 string characters out of 5792971
- 1945187 words of memory out of 5000000
- 43287 multiletter control sequences out of 15000+600000
+ 21621 strings out of 476041
+ 395031 string characters out of 5792971
+ 1946187 words of memory out of 5000000
+ 43301 multiletter control sequences out of 15000+600000
  573201 words of font info for 82 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
- 84i,8n,93p,522b,731s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi6.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plti10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on kuratowskis-expected-number.pdf (13 pages, 208517 bytes).
+ 84i,9n,93p,570b,731s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </home/karoljanic/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi6.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plti10.pfb>
+Output written on kuratowskis-expected-number.pdf (15 pages, 255709 bytes).
 PDF statistics:
- 300 PDF objects out of 1000 (max. 8388607)
- 236 compressed objects within 3 object streams
- 39 named destinations out of 1000 (max. 500000)
- 218 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 340 PDF objects out of 1000 (max. 8388607)
+ 273 compressed objects within 3 object streams
+ 52 named destinations out of 1000 (max. 500000)
+ 271 words of extra memory for PDF output out of 10000 (max. 10000000)
 
