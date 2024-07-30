@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  29 JUL 2024 22:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  31 JUL 2024 00:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1131,52 +1131,124 @@ Underfull \hbox (badness 2512) detected at line 481
 \OT4/cmr/m/n/10 = \OML/plm/m/it/10 O\OT4/cmr/m/n/10 ([](\OML/plm/m/it/10 k[]\OT4/cmr/m/n/10 ))\OML/plm/m/it/10 ;|$ 
  []
 
+
+Underfull \hbox (badness 2941) in paragraph at lines 491--491
+$[]\OT4/cmr/m/n/10 (1 |  + []) = [](1 |  + []) 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 491--491
+\OT4/cmr/m/n/10 = []([] |  \OMS/plsy/m/n/10 ^^@ []\OT4/cmr/m/n/10 ) 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 491--491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 491
+\OT4/cmr/m/n/10 = []([] |  \OMS/plsy/m/n/10 ^^@ []\OT4/cmr/m/n/10 ) 
+ []
+
+
+Underfull \hbox (badness 2941) detected at line 491
+$[]\OT4/cmr/m/n/10 (1 |  + []) = [](1 |  + []) 
+ []
+
+
+Underfull \hbox (badness 2941) in paragraph at lines 491--491
+$[] \OT4/cmr/m/n/10 = [](1 |  + []) 
+ []
+
+
+Underfull \hbox (badness 3492) in paragraph at lines 491--491
+\OT4/cmr/m/n/10 = []([] |  \OMS/plsy/m/n/10 ^^@ []\OT4/cmr/m/n/10 ) 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 491--491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 491
+\OMS/plsy/m/n/10 ^^T \OT4/cmr/m/n/10 ([])[]|$ 
+ []
+
+
+Underfull \hbox (badness 3492) detected at line 491
+\OT4/cmr/m/n/10 = []([] |  \OMS/plsy/m/n/10 ^^@ []\OT4/cmr/m/n/10 ) 
+ []
+
+
+Underfull \hbox (badness 2941) detected at line 491
+$[] \OT4/cmr/m/n/10 = [](1 |  + []) 
+ []
+
 [14]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 495.
+(hyperref)                removing `math shift' on input line 520.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 495.
+(hyperref)                removing `math shift' on input line 520.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 503.
+(hyperref)                removing `math shift' on input line 526.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 503.
+(hyperref)                removing `math shift' on input line 526.
 
+<../fk.png, id=224, 499.8675pt x 649.42625pt>
+File: ../fk.png Graphic file (type png)
+<use ../fk.png>
+Package pdftex.def Info: ../fk.png  used on input line 530.
+(pdftex.def)             Requested size: 369.88582pt x 480.5679pt.
 
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 505.
+Overfull \hbox (24.88582pt too wide) in paragraph at lines 530--531
+ [][] 
+ []
 
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 505.
-
-[15] (./kuratowskis-expected-number.aux)
+[15] [16 <../fk.png>] [17] (./kuratowskis-expected-number.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `kuratowskis-expected-number.out' has not changed.
-(rerunfilecheck)             Checksum: D45855853461C7C6358DF5C7CDC0D6DA;8040.
+(rerunfilecheck)             Checksum: 4FA6C918B998E7D16CBD4CEABE3A6F56;7972.
  ) 
 Here is how much of TeX's memory you used:
- 21621 strings out of 476041
- 395031 string characters out of 5792971
- 1946187 words of memory out of 5000000
- 43301 multiletter control sequences out of 15000+600000
+ 21630 strings out of 476041
+ 395146 string characters out of 5792971
+ 1949187 words of memory out of 5000000
+ 43308 multiletter control sequences out of 15000+600000
  573201 words of font info for 82 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
  84i,9n,93p,570b,731s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/karoljanic/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi6.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plti10.pfb>
-Output written on kuratowskis-expected-number.pdf (15 pages, 255709 bytes).
+ </home/karoljanic/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi6.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy5.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy8.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plti10.pfb>
+Output written on kuratowskis-expected-number.pdf (17 pages, 283874 bytes).
 PDF statistics:
- 340 PDF objects out of 1000 (max. 8388607)
- 273 compressed objects within 3 object streams
- 52 named destinations out of 1000 (max. 500000)
- 271 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 355 PDF objects out of 1000 (max. 8388607)
+ 282 compressed objects within 3 object streams
+ 54 named destinations out of 1000 (max. 500000)
+ 276 words of extra memory for PDF output out of 10000 (max. 10000000)
 

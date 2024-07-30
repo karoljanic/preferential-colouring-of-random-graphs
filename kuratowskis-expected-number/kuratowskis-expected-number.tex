@@ -479,29 +479,64 @@ Co przekłada się na:
 \begin{dmath}
   O(\exp(\sum_{t \in V(F_k)}\frac{C_{F_k}(t)^2}{t})) = O(\exp(\sum_{t=1}^{k} \frac{(t-1)^2(k-t)^2}{k^2})) = O(\exp(k^2)),
 \end{dmath}
-Podstawiając do wzoru na prawdopodobieństwo $p_{F_k}$ otrzymujemy:
-\newline
-(niech $F^\#$ to graf $F_k$ bez wierzchołków z $F$ i krawędzi pomiędzy nimi)
+Ale formułę z notacją $O(\cdot)$ można zamienić na dokładną formułę:
 \begin{dmath}
-  p_{F_k} = \prod_{v \in V^{-}(F_k)} d_{F_k}^{in}(v)! \prod_{ij \in E(F_k)} \frac{1}{2 \sqrt{ij}} \exp(O(\sum_{i \in V(F_k)}\frac{C_{F_k}(i)^2}{i})) =
-  (\prod_{v \in V^{-}(F)} d_{F}^{in}(v)!) \cdot (\prod_{ij \in E(F)} \frac{1}{2 \sqrt{ij}}) \cdot (\prod_{v \in V^{-}(F^\#)} d_{F_k}^{in}(v)!) \cdot (\prod_{ij \in E(F^\#)} \frac{1}{2 \sqrt{ij}}) \cdot \exp(O(\sum_{i \in V(F_k)}\frac{C_{F_k}(i)^2}{i}))
-  = p_{F} \cdot p_{F^\#}
+  p_H = \prod_{v \in V^{-}(H)} d_{H}^{in}(v)! \prod_{v \in V^{+}(H)} \frac{1}{2v - 1} \prod_{v \notin V^{+}(H)} (1 + \frac{C_{H}(v)}{2v-1})
 \end{dmath}
-
+Wtedy ostatni czynnik można zapisać jako 
 \begin{dmath}
-  p_{F^\#} = 2!^{\frac{k'}{3}} \cdot (\frac{m^2}{2m})^{k'} \cdot e^{k^2}
+  \prod_{t \notin V^{+}(H)} (1 + \frac{\frac{(t-1)(k-t)}{k}}{2t-1}) =
+  \prod_{t \notin V^{+}(H)} (1 + \frac{k-t}{2k}) =
+  \prod_{t \notin V^{+}(H)} (\frac{3}{2} - \frac{t}{2k}) \leq (\frac{3}{2})^{\frac{k}{2}}
+\end{dmath}
+Mając konkretne ustawienie $k$ wierzchołków wyznaczamy $p_{F_k}$ przemnożone dla różnych rozłożeń stopni.
+Na podstawie opisanych wyżej 3. przypadków mamy 2 możliwości rozdziału stopni.
+\newline
+\textbf{Wszystkie stopnie są nie większe niż 1:}
+\newline
+Jest ich $(m^2)^{\frac{k'}{3}} \cdot (m(m-1))^{\frac{k'}{3}} \cdot (m(m-1))^{\frac{k'}{3}} = (m^4(m-1)^2)^{\frac{k'}{3}} \approx (m^2)^{k'}$
+\begin{dmath}
+  p_{F_k^1} = \frac{1}{2^{k'}} \cdot \frac{1}{v_{i_1} \cdot \ldots \cdot v_{i_{k'}} \cdot m^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}}
+\end{dmath}
+\textbf{Występują stopnie 2 - opsane w przypadku 3.:}
+\newline
+Jest ich $(m^2)^{\frac{k'}{3}} \cdot (m(m-1))^{\frac{k'}{3}} \cdot m^{\frac{k'}{3}} = (m^4(m-1))^{\frac{k'}{3}} \approx (m^{\frac{5}{3}})^{k'}$
+\begin{dmath}
+  p_{F_k^2} = 2^{\frac{k'}{3}} \cdot \frac{1}{2^{k'}} \cdot \frac{1}{v_{i_1} \cdot \ldots \cdot v_{i_{k'}} \cdot m^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}}
+\end{dmath}
+Co możemy połączyć w jedno wyrażenie określające oczekiwane $F_k$ dla konkretnego ustawienia wierzchołków $v_1, \ldots v_k$ - $\mathbb{E}[F_k^\#]$:
+\begin{dmath}
+  \mathbb{E}[F_k^\#] = (m^2)^{k'} \cdot \frac{1}{2^{k'}} \cdot \frac{1}{v_{i_1} \cdot \ldots \cdot v_{i_{k'}} \cdot m^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}} +
+  (m^{\frac{5}{3}})^{k'} \cdot 2^{\frac{k'}{3}} \cdot \frac{1}{2^{k'}} \cdot \frac{1}{v_{i_1} \cdot \ldots \cdot v_{i_{k'}} \cdot m^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}} = 
+  (m^{k'} + (2m^2)^{\frac{k'}{3}}) \cdot \frac{1}{2^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}} \cdot \frac{1}{v_{i_1} \cdot \ldots \cdot v_{i_{k'}}}
+\end{dmath}
+Gdy $v_{i_1} < \ldots < v_{i_{k'}}$ wybierzemy z $n$ wierzchołków to otrzymamy:
+\begin{dmath}
+  \mathbb{E}[F_k^*] = \sum_{1 \leq v_1 < \ldots < v_k \leq n} \mathbb{E}[F_k^\#] = 
+  (m^{k'} + (2m^2)^{\frac{k'}{3}}) \cdot \frac{1}{2^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}} \cdot \frac{1}{k!} \cdot H_n^{k'} =
+  (m^{k'} + (2m^2)^{\frac{k'}{3}}) \cdot \frac{1}{2^{k'}} \cdot (\frac{3}{2})^{\frac{k'}{3}} \cdot \frac{1}{k!} \cdot log_2(n)^{k'}
 \end{dmath}
 
 \subsection{Wyznaczanie oczekiwanej liczby $F_k$}
+Wystarczy już tylko przemnożyć $\mathbb{E}[F_k^*]$ przez $\#F_k$ i zsumować po $k=1, \ldots, n$:
 \begin{dmath}
-  \mathbb{E}[F_k] = \sum_{1 \leq v_1 < \ldots < v_k \leq n} \#F_k \cdot p_{F_k}
-  = \sum_{1 \leq v_1 < \ldots < v_k \leq n} \#F_k \cdot p_{F} \cdot p_{F^\#}
-  = \sum_{1 \leq v_1 < \ldots < v_k \leq n} \#F_k \cdot p_{F} \cdot p_{F^\#}
+  \mathbb{E}[F] = \sum_{k=1}^n \#F_k \cdot \mathbb{E}[F_k^*]
 \end{dmath}
 
+\subsection{Wizualizacja $\mathbb{E}[F_k^*]$}
+Zmiana wartości dla różnych $k \in \{1, \ldots, 25\}$ dla $m=2$ i $n=1000$:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=13cm]{../fk.png}
+\end{figure}
 
-\subsection{Zastosowanie do $K_5$}
-
-\subsection{Zastosowanie do $K_{3,3}$}
+\section{Obserwacje}
+\begin{itemize}
+  \item Model BA nie jest skłonny do planarności
+  \item Dla $m=1$ w grafie nie powstają cykle, więc nie ma powodów do nieplanarności
+  \item Dla $m>1$ grafy szybko stają się nieplanarne
+  \item Powodem nieplanarności częściej są podpodziały $K_{3,3}$ niż $K_5$
+  \item Podpodziałami najczęściej występującymi są te zbudowane na $(\log_2(n) + 5) \cdot O(m^x)$ wierzchołkach - obserwacja ostatnich wizualizacji. Zatem podpodziałów należy szukać w podgrafach rozmiarów $O(\log_2(n))$.
+\end{itemize}
 
 \end{document}

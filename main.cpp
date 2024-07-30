@@ -90,7 +90,7 @@ int main() {
 
   RandomGraphFactory random_graph_factory;
 
-  const BAGraph graph1 = random_graph_factory.createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(10, 40, 5, &painter);
+  const BAGraph graph1 = random_graph_factory.createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(10, 50, 2, &painter);
   std::cout << "Graph 1 density: " << graph1.getDensity() << std::endl;
   std::cout << "Graph 1 degrees histogram:" << std::endl;
   printDegreesHistogram(graph1.getDegreesHistogram());
