@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{graphicx} 
+\usepackage{amsfonts} 
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{tikz}
+\usepackage{polski}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{breqn}
+
+\title{ Wskaźnik planarności w grafach Barabasi Albert }
+
+\author{}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Cel}
+Chcemy oceniać szansę na wystąpienie podpodziału $K_{3,3}$ lub $K_5$ w grafie $G^m_n$.
+
+\section{Założenia}
+\begin{enumerate}
+    \item Dowolne ścieżki nie powinny wpływać na wskaźnik, ponieważ mogą zostać zkontrakowane do jednego wierzchołka.
+    \item Wskaźnik powinien uwzględniać to, że każda krawędź może zostać użyta tylko raz.
+\end{enumerate}
+
+\section{Realizacja}
+\begin{dmath}
+    \tau(G) = \sum_{u \neq v \in V(G)} \frac{1}{d(u) \cdot d(v)}
+\end{dmath}
+
+\section{Usprawnienia obliczniowe}
+
+\end{document}
