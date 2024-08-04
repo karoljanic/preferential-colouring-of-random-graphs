@@ -10,6 +10,13 @@
 namespace graph::random {
 class AvoidingKuratowskiGraphsPainter : public GraphPainter {
  public:
+  struct Metric {
+    float k33{0.0F};
+    float k5{0.0F};
+  };
+
+  typedef std::map<size_t, std::map<size_t, Metric>> MetricsMap;
+
   AvoidingKuratowskiGraphsPainter() = default;
   explicit AvoidingKuratowskiGraphsPainter(std::vector<ColorType> edges_colors);
 
@@ -25,17 +32,12 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
   void paintEdge(BAGraph& graph, BAEdge& edge) override;
 
   [[nodiscard]] const std::map<ColorType, BAGraph>& getEmbeddings() const { return embeddings_; }
+  [[nodiscard]] const std::vector<std::pair<size_t, size_t>>& getColoringTimes() const { return coloring_times_vector_; }
+  [[nodiscard]] const std::map<ColorType, MetricsMap>& getMetricsMap() const { return metrics_map_; }
 
   void reset() override;
 
-  // private:
-  struct Metric {
-    float k33{0.0F};
-    float k5{0.0F};
-  };
-
-  typedef std::map<size_t, std::map<size_t, Metric>> MetricsMap;
-
+ private:
   static constexpr size_t K33_MAX_DEG{3};
   static constexpr size_t K5_MAX_DEG{4};
   static constexpr float EPSILON{1e-6F};

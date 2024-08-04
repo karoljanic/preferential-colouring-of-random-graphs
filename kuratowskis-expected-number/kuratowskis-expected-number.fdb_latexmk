@@ -1,10 +1,10 @@
 # Fdb version 4
-["pdflatex"] 1722378637.20094 "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/kuratowskis-expected-number/kuratowskis-expected-number.tex" "kuratowskis-expected-number.pdf" "kuratowskis-expected-number" 1722378638.60675 0
+["pdflatex"] 1722801928.33554 "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/kuratowskis-expected-number/kuratowskis-expected-number.tex" "kuratowskis-expected-number.pdf" "kuratowskis-expected-number" 1722801930.8357 0
   "../fk.png" 1722378611.98367 26429 2f3a5b475c619fb4b2b2e67a311099b3 ""
   "../k33.png" 1722263287.97329 50634 462c19c3e5e2a074dbb259ffbdab95e8 ""
   "../k5.png" 1721826226.42699 46448 9be8872b4584c3d13a4599976245d953 ""
   "/home/karoljanic/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1698532765.26014 11524 bc4eb6c7d0133b2e7b0d70923d30d8ab ""
-  "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/kuratowskis-expected-number/kuratowskis-expected-number.tex" 1722378634.82034 32443 370c0bc9773f810221eb81908503a097 ""
+  "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/kuratowskis-expected-number/kuratowskis-expected-number.tex" 1722801925.92674 32476 5ab13bb8be0ada59728bb04f983d74bb ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plit.enc" 1716849630 1946 62ba825cda1ff16dbaa60d53ac60525a ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc" 1716849630 3126 59f33ff3e396436ebc36f4e7b444d5c4 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc" 1716849630 2005 f094775651a1386335c158fb632529f1 ""
@@ -193,9 +193,9 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1716849630 41588 b43d3e860a4f94167ee1e725ff526a72 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1716880519.65669 35853 3af76b4c375808d3bd51e191f36f3992 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1716880511 7126277 192bef1b98f99963ca443dd8345b33d2 ""
-  "kuratowskis-expected-number.aux" 1722378638.45701 5167 91084d366047d4dd9a65dec2f6857b23 "pdflatex"
-  "kuratowskis-expected-number.out" 1722378638.45701 7972 4fa6c918b998e7d16cbd4ceabe3a6f56 "pdflatex"
-  "kuratowskis-expected-number.tex" 1722378634.82034 32443 370c0bc9773f810221eb81908503a097 ""
+  "kuratowskis-expected-number.aux" 1722801930.47007 5167 91084d366047d4dd9a65dec2f6857b23 "pdflatex"
+  "kuratowskis-expected-number.out" 1722801930.47007 7972 4fa6c918b998e7d16cbd4ceabe3a6f56 "pdflatex"
+  "kuratowskis-expected-number.tex" 1722801925.92674 32476 5ab13bb8be0ada59728bb04f983d74bb ""
   (generated)
   "kuratowskis-expected-number.aux"
   "kuratowskis-expected-number.log"

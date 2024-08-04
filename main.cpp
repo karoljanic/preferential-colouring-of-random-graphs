@@ -78,7 +78,7 @@ void printMetrics(const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics, st
 
 void saveTimes(const AvoidingKuratowskiGraphsPainter& painter, const std::string& file_name) {
   std::ofstream file{file_name};
-  for (const auto& time_pair : painter.coloring_times_vector_) {
+  for (const auto& time_pair : painter.getColoringTimes()) {
     file << time_pair.first << " " << time_pair.second << std::endl;
   }
 }
@@ -111,7 +111,7 @@ int main() {
   }
 
   std::fstream console("console.txt", std::ios::out);
-  for (auto [color, metrics] : painter.metrics_map_) {
+  for (auto [color, metrics] : painter.getMetricsMap()) {
     console << "Color: " << color.hex << std::endl;
     printMetrics(metrics, console);
   }

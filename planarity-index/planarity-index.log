@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  31 JUL 2024 18:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  4 AUG 2024 22:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -676,29 +676,65 @@ LaTeX Font Info:    External font `plex10' loaded for size
 (Font)              <7> on input line 23.
 LaTeX Font Info:    External font `plex10' loaded for size
 (Font)              <5> on input line 23.
- [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}] [2] (./planarity-index.aux)
+Overfull \hbox (1.00053pt too wide) in paragraph at lines 49--53
+\OT4/cmr/m/n/10 Przy po-ja-wia-niu si¦ no-we-go wierz-choª-ka/kraw¦dzi wy-star-czy zak-tu-ali-zo-wa¢ cz¦±¢
+ []
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}]
+<../a1-1.png, id=48, 1001.6622pt x 498.663pt>
+File: ../a1-1.png Graphic file (type png)
+<use ../a1-1.png>
+Package pdftex.def Info: ../a1-1.png  used on input line 64.
+(pdftex.def)             Requested size: 341.43306pt x 169.97688pt.
+<../a1-2.png, id=50, 1003.8303pt x 498.663pt>
+File: ../a1-2.png Graphic file (type png)
+<use ../a1-2.png>
+Package pdftex.def Info: ../a1-2.png  used on input line 68.
+(pdftex.def)             Requested size: 341.43306pt x 169.61165pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<../a1-3.png, id=51, 1003.8303pt x 498.663pt>
+File: ../a1-3.png Graphic file (type png)
+<use ../a1-3.png>
+Package pdftex.def Info: ../a1-3.png  used on input line 72.
+(pdftex.def)             Requested size: 341.43306pt x 169.61165pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<../a1-4.png, id=52, 1003.8303pt x 498.663pt>
+File: ../a1-4.png Graphic file (type png)
+<use ../a1-4.png>
+Package pdftex.def Info: ../a1-4.png  used on input line 76.
+(pdftex.def)             Requested size: 341.43306pt x 169.61165pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[2 <../a1-1.png>] [3 <../a1-2.png> <../a1-3.png> <../a1-4.png>] (./planarity-index.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `planarity-index.out' has not changed.
-(rerunfilecheck)             Checksum: 1537269EC24C2AEAB540994D384F0FE3;416.
+(rerunfilecheck)             Checksum: C9AE161D1557A8002288141713971F34;616.
  ) 
 Here is how much of TeX's memory you used:
- 21259 strings out of 476041
- 388905 string characters out of 5792971
- 1939187 words of memory out of 5000000
- 42986 multiletter control sequences out of 15000+600000
+ 21292 strings out of 476041
+ 389451 string characters out of 5792971
+ 1941187 words of memory out of 5000000
+ 43016 multiletter control sequences out of 15000+600000
  569182 words of font info for 70 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
- 84i,5n,93p,498b,440s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,6n,93p,498b,442s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb>
-Output written on planarity-index.pdf (2 pages, 58882 bytes).
+Output written on planarity-index.pdf (3 pages, 594816 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
- 45 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 113 PDF objects out of 1000 (max. 8388607)
+ 81 compressed objects within 1 object stream
+ 13 named destinations out of 1000 (max. 500000)
+ 81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
