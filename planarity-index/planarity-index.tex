@@ -21,18 +21,30 @@
 
 \section{Cel}
 Chcemy oceniać szansę na wystąpienie podpodziału $K_{3,3}$ lub $K_5$ w grafie $G^m_n$.
+Zaczynamy od pustego grafu. W każdym kroku dodajemy nową krawędź/ nowy wierzchołek z krawędzią.
+Co każde dodanie krawędzi na podstawie indeksu planaraności decydujemy jaki kolor jej nadać. Każdy kolor odpowiada jednej z warstw na które rozkładamy graf.
+Indeks ten liczymy dla każdej warstwy osobno.
 
 \section{Założenia}
 \begin{enumerate}
-    \item Dowolne ścieżki nie powinny wpływać na wskaźnik, ponieważ mogą zostać zkontrakowane do jednego wierzchołka.
+    \item Dowolne ścieżki nie powinny wpływać na wskaźnik, ponieważ mogą zostać zkontrakowane.
     \item Wskaźnik powinien uwzględniać to, że każda krawędź może zostać użyta tylko raz.
+    \item Trzeba uwzględnić to aby wierzchołki tworzyły klikę czy graf pełny dwudzielny.
 \end{enumerate}
 
 \section{Realizacja}
+Weźmy pewną ścieżką $P$ w grafie: $p_1, \ldots, p_k$ i zdefiniujmy funkcję:
 \begin{dmath}
-    \tau(G) = \sum_{u \neq v \in V(G)} \frac{1}{d(u) \cdot d(v)}
+    \tau(P) = \phi(p_1) \cdot (\prod_{i=2}^{k-1} \psi(p_i)) \cdot \phi(p_k)
 \end{dmath}
+gdzie: $\phi(p) = \frac{MIN\{d, \\\ deg(p)\}}{d}$ oraz $\psi(p) = \frac{1}{deg(p) - 1}$.
+\newline
+Tak zdefiniowana funkcja $\tau(P)$ zwraca wartości z przedziału $(0, 1]$. Wartość 1 oznacza, że ścieżka $P$ może zostać zkontraktowana do krawędzi łączącej dwa wierzchołki stopnia $d$ oraz wierzchołki w niej występujące nie wystąpią w innym podgrafie.
+\newline
+Sumując wartości $\tau(P)$ dla wszystkich ścieżek pomiędzy dwoma wierzchołkami otrzymamy 'oczekiwaną liczbę ścieżek', które mogą zostać skontraktowane do krawędzi łączącej dwa wierzchołkami stopnia o 'oczekwianym stopniu $d$'.
+\newline
+Aby określić wartość $\tau$ dla całego grafu sumujemy mnożymy $\tau$ dla ścieżek pomiędzy wierzchołkami tworzącymi potencjalne kliki pełne grafy dwudzielne.
 
-\section{Usprawnienia obliczniowe}
+\section{Usprawnienia obliczeniowe}
 
 \end{document}

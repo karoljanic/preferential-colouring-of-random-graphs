@@ -38,6 +38,7 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
 
   static constexpr size_t K33_MAX_DEG{3};
   static constexpr size_t K5_MAX_DEG{4};
+  static constexpr float EPSILON{1e-6F};
 
   std::mt19937 generator_{std::random_device{}()};
   std::map<ColorType, BAGraph> embeddings_;
@@ -49,15 +50,22 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
   static void updateAllPathsMetricSmart(BAGraph& graph, MetricsMap& metrics_map);
   static void updateShortestPathsMetric(BAGraph& graph, MetricsMap& metrics_map);
 
-  [[nodiscard]] static Metric sumMetric(MetricsMap& metrics_map);
+  [[nodiscard]] static Metric sumMetric(const MetricsMap& metrics_map);
+  [[nodiscard]] static Metric productSubgraphMetric(const MetricsMap& metrics_map);
 
   template <size_t MAX_DEG>
   [[nodiscard]] static float calculatePathImpact(BAGraph& graph, std::vector<size_t>& path);
 
-  [[nodiscard]] static float phi(size_t k);
+  [[nodiscard]] static float phi(size_t node_degree);
 
   template <size_t MAX_DEG>
-  [[nodiscard]] static float psi(size_t k);
+  [[nodiscard]] static float psi(size_t node_degree);
+
+  static size_t binomial(size_t n_value, size_t k_value);
+  static size_t factorial(size_t n_value);
+
+  static void iterateOverSubsets(const std::vector<size_t>& elements, size_t target_size,
+                                 const std::function<void(const std::vector<size_t>&)>& callback);
 };
 }  // namespace graph::random
 

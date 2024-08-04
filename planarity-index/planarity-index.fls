@@ -146,6 +146,7 @@ INPUT /usr/share/texmf-dist/tex/latex/polski/ot4cmr.fd
 INPUT /usr/share/texmf-dist/tex/latex/polski/ot4cmr.fd
 INPUT /usr/share/texmf-dist/tex/latex/base/ot4enc.def
 INPUT /usr/share/texmf-dist/tex/latex/polski/ot4cmr.fd
+INPUT /usr/share/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texmf-dist/fonts/tfm/public/pl/plr10.tfm
 INPUT /usr/share/texmf-dist/tex/latex/mathtools/mathtools.sty
 INPUT /usr/share/texmf-dist/tex/latex/mathtools/mathtools.sty
@@ -293,8 +294,8 @@ INPUT /usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
 INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc
 INPUT /usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc
-INPUT /usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc
 INPUT /usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc
+INPUT /usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc
 INPUT planarity-index.aux
 INPUT ./planarity-index.out
 INPUT ./planarity-index.out

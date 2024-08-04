@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  31 JUL 2024 00:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024/Arch Linux) (preloaded format=pdflatex 2024.5.28)  31 JUL 2024 18:01
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -678,27 +678,27 @@ LaTeX Font Info:    External font `plex10' loaded for size
 (Font)              <5> on input line 23.
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}] (./planarity-index.aux)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc}{/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc}] [2] (./planarity-index.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `planarity-index.out' has not changed.
-(rerunfilecheck)             Checksum: 03F18B684C7893C7334C7F8C30C77F05;411.
+(rerunfilecheck)             Checksum: 1537269EC24C2AEAB540994D384F0FE3;416.
  ) 
 Here is how much of TeX's memory you used:
- 21257 strings out of 476041
- 388893 string characters out of 5792971
- 1932187 words of memory out of 5000000
+ 21259 strings out of 476041
+ 388905 string characters out of 5792971
+ 1939187 words of memory out of 5000000
  42986 multiletter control sequences out of 15000+600000
  569182 words of font info for 70 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
- 84i,5n,93p,498b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,5n,93p,498b,440s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plex10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plmi7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plr7.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy10.pfb></usr/share/texmf-dist/fonts/type1/public/pl/plsy7.pfb>
-Output written on planarity-index.pdf (1 page, 51219 bytes).
+Output written on planarity-index.pdf (2 pages, 58882 bytes).
 PDF statistics:
- 86 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
- 8 named destinations out of 1000 (max. 500000)
+ 91 PDF objects out of 1000 (max. 8388607)
+ 68 compressed objects within 1 object stream
+ 10 named destinations out of 1000 (max. 500000)
  45 words of extra memory for PDF output out of 10000 (max. 10000000)
 

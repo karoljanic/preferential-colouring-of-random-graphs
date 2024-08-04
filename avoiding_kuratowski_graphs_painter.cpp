@@ -16,17 +16,17 @@ AvoidingKuratowskiGraphsPainter::AvoidingKuratowskiGraphsPainter(std::vector<Col
   }
 }
 
-void AvoidingKuratowskiGraphsPainter::paintNode(BAGraph& graph, BANode& node) {
+void AvoidingKuratowskiGraphsPainter::paintNode(BAGraph& /*graph*/, BANode& node) {
   for (const auto& edges_color : edges_colors_) {
     embeddings_[edges_color].addNode();
 
-    for (auto& it : metrics_map_[edges_color]) {
-      it.second[node.id] = Metric{};
+    for (auto& iter : metrics_map_[edges_color]) {
+      iter.second[node.id] = Metric{};
     }
 
     metrics_map_[edges_color][node.id] = std::map<size_t, Metric>{};
-    for (size_t v = 0; v < node.id; ++v) {
-      metrics_map_[edges_color][node.id][v] = Metric{};
+    for (size_t node_v = 0; node_v < node.id; ++node_v) {
+      metrics_map_[edges_color][node.id][node_v] = Metric{};
     }
   }
 }
@@ -35,15 +35,18 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
   auto start_coloring = std::chrono::high_resolution_clock::now();
 
   std::map<ColorType, float> metrics;
+  std::map<ColorType, MetricsMap> metrics_map_copy;
   for (const auto& edges_color : edges_colors_) {
-    BAGraph embedding_copy{embeddings_[edges_color]};
-    MetricsMap metrics_map_copy{metrics_map_[edges_color]};
+    metrics_map_copy[edges_color] = MetricsMap{metrics_map_[edges_color]};
 
+    BAGraph embedding_copy{embeddings_[edges_color]};
     embedding_copy.addEdge(edge.source, edge.target);
+
     //	updateShortestPathsMetric(embedding_copy, metrics_map_copy);
-    updateAllPathsMetric(embedding_copy, metrics_map_copy);
+    updateAllPathsMetric(embedding_copy, metrics_map_copy[edges_color]);
     //	updateAllPathsMetricSmart(embedding_copy, metrics_map_copy);
-    Metric metric = sumMetric(metrics_map_copy);
+    const Metric metric = productSubgraphMetric(metrics_map_copy[edges_color]);
+//    const Metric metric = sumMetric(metrics_map_copy[edges_color]);
     metrics[edges_color] = metric.k33 + metric.k5;
   }
 
@@ -56,16 +59,17 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
 
   std::vector<ColorType> max_colors;
   for (const auto& edges_color : edges_colors_) {
-    if (std::fabs(max_metric_value - metrics[edges_color]) < 0.0001F) {
+    if (std::fabs(max_metric_value - metrics[edges_color]) < EPSILON) {
       max_colors.push_back(edges_color);
     }
   }
 
   std::uniform_int_distribution<size_t> distribution(0, max_colors.size() - 1);
-  size_t index = distribution(generator_);
+  const size_t index = distribution(generator_);
   embeddings_[max_colors[index]].addEdge(edge.source, edge.target);
   edge.color = max_colors[index];
   embeddings_[max_colors[index]].getEdge(edge.source, edge.target).color = max_colors[index];
+  metrics_map_[max_colors[index]] = metrics_map_copy[max_colors[index]];
 
   auto end_coloring = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_coloring - start_coloring);
@@ -79,10 +83,10 @@ void AvoidingKuratowskiGraphsPainter::reset() {}
 void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(BAGraph& graph,
                                                            AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
   metrics_map.clear();
-  for (size_t v = 0; v < graph.getNodesNumber(); ++v) {
-    metrics_map[v] = std::map<size_t, Metric>();
-    for (size_t u = 0; u < graph.getNodesNumber(); ++u) {
-      metrics_map[v][u] = Metric{};
+  for (size_t node_v = 0; node_v < graph.getNodesNumber(); ++node_v) {
+    metrics_map[node_v] = std::map<size_t, Metric>();
+    for (size_t node_u = 0; node_u < graph.getNodesNumber(); ++node_u) {
+      metrics_map[node_v][node_u] = Metric{};
     }
   }
 
@@ -93,16 +97,15 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(BAGraph& graph,
     while (!paths.empty()) {
       std::vector<size_t> path = paths.top();
       paths.pop();
-      size_t last = path.back();
+      const size_t last = path.back();
 
-      float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
+      const float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
       metrics_map[path.front()][path.back()].k33 += k33_factor;
       metrics_map[path.back()][path.front()].k33 += k33_factor;
 
-      float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
+      const float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
       metrics_map[path.front()][path.back()].k5 += k5_factor;
       metrics_map[path.back()][path.front()].k5 += k5_factor;
-      ;
 
       for (const auto& neighbor : graph.getNeighbours(last)) {
         if (std::find(path.begin(), path.end(), neighbor.id) == path.end()) {
@@ -172,10 +175,10 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(BAGraph& graph,
 void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(BAGraph& graph,
                                                                 AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
   metrics_map.clear();
-  for (size_t v = 0; v < graph.getNodesNumber(); ++v) {
-    metrics_map[v] = std::map<size_t, Metric>();
-    for (size_t u = 0; u < graph.getNodesNumber(); ++u) {
-      metrics_map[v][u] = Metric{};
+  for (size_t node_v = 0; node_v < graph.getNodesNumber(); ++node_v) {
+    metrics_map[node_v] = std::map<size_t, Metric>();
+    for (size_t node_u = 0; node_u < graph.getNodesNumber(); ++node_u) {
+      metrics_map[node_v][node_u] = Metric{};
     }
   }
 
@@ -188,7 +191,7 @@ void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(BAGraph& graph,
     queue.push(source);
 
     while (!queue.empty()) {
-      size_t node = queue.front();
+      const size_t node = queue.front();
       queue.pop();
 
       for (const auto& neighbor : graph.getNeighbours(node)) {
@@ -210,19 +213,19 @@ void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(BAGraph& graph,
       while (!paths.empty()) {
         std::vector<size_t> path = paths.top();
         paths.pop();
-        size_t last = path.back();
+        const size_t last = path.back();
 
         if (last == source) {
-          float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
+          const float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
           metrics_map[path.front()][path.back()].k33 += k33_factor;
           metrics_map[path.back()][path.front()].k33 += k33_factor;
 
-          float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
+          const float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
           metrics_map[path.front()][path.back()].k5 += k5_factor;
           metrics_map[path.back()][path.front()].k5 += k5_factor;
         }
         else {
-          for (size_t pred : predecessors[last]) {
+          for (const size_t pred : predecessors[last]) {
             std::vector<size_t> new_path = path;
             new_path.push_back(pred);
             paths.push(new_path);
@@ -234,18 +237,108 @@ void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(BAGraph& graph,
 }
 
 AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::sumMetric(
-    AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
-  float k33{0.0F};
-  float k5{0.0F};
+    const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
+  float k33_sum{0.0F};
+  float k5_sum{0.0F};
 
   for (const auto& outerPair : metrics_map) {
     for (const auto& innerPair : outerPair.second) {
-      k33 += innerPair.second.k33;
-      k5 += innerPair.second.k5;
+      k33_sum += innerPair.second.k33;
+      k5_sum += innerPair.second.k5;
     }
   }
 
-  return {.k33 = k33, .k5 = k5};
+  return {.k33 = k33_sum, .k5 = k5_sum};
+}
+
+AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::productSubgraphMetric(
+    const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
+  constexpr float THRESHOLD{0.25F};
+
+  float k33_sum{0.0F};
+  float k5_sum{0.0F};
+
+  const size_t nodes_number{metrics_map.size()};
+
+  // check for K3,3
+  for (size_t node1 = 0; node1 < nodes_number; ++node1) {
+    for (size_t node2 = node1 + 1; node2 < nodes_number; ++node2) {
+      for (size_t node3 = node2 + 1; node3 < nodes_number; ++node3) {
+        for (size_t node4 = 0; node4 < nodes_number; ++node4) {
+          if (node1 == node4 || node2 == node4 || node3 == node4) {
+            continue;
+          }
+          if (metrics_map.at(node1).at(node4).k33 < THRESHOLD || metrics_map.at(node2).at(node4).k33 < THRESHOLD ||
+              metrics_map.at(node3).at(node4).k33 < THRESHOLD) {
+            continue;
+          }
+
+          for (size_t node5 = node4 + 1; node5 < nodes_number; ++node5) {
+            if (node1 == node5 || node2 == node5 || node3 == node5) {
+              continue;
+            }
+            if (metrics_map.at(node1).at(node5).k33 < THRESHOLD || metrics_map.at(node2).at(node5).k33 < THRESHOLD ||
+                metrics_map.at(node3).at(node5).k33 < THRESHOLD) {
+              continue;
+            }
+
+            for (size_t node6 = node5 + 1; node6 < nodes_number; ++node6) {
+              if (node1 == node6 || node2 == node6 || node3 == node6) {
+                continue;
+              }
+              if (metrics_map.at(node1).at(node6).k33 < THRESHOLD || metrics_map.at(node2).at(node6).k33 < THRESHOLD ||
+                  metrics_map.at(node3).at(node6).k33 < THRESHOLD) {
+                continue;
+              }
+
+              k33_sum += 0.5F * metrics_map.at(node1).at(node4).k33 * metrics_map.at(node1).at((node5)).k33 *
+                         metrics_map.at(node1).at(node6).k33 * metrics_map.at(node2).at(node4).k33 *
+                         metrics_map.at(node2).at((node5)).k33 * metrics_map.at(node2).at(node6).k33 *
+                         metrics_map.at(node3).at(node4).k33 * metrics_map.at(node3).at((node5)).k33 *
+                         metrics_map.at(node3).at(node6).k33;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // check for K5
+  for (size_t node1 = 0; node1 < nodes_number; ++node1) {
+    for (size_t node2 = node1 + 1; node2 < nodes_number; ++node2) {
+      if (metrics_map.at(node1).at(node2).k5 < THRESHOLD) {
+        continue;
+      }
+
+      for (size_t node3 = node2 + 1; node3 < nodes_number; ++node3) {
+        if (metrics_map.at(node1).at(node3).k5 < THRESHOLD || metrics_map.at(node2).at(node3).k5 < THRESHOLD) {
+          continue;
+        }
+
+        for (size_t node4 = node3 + 1; node4 < nodes_number; ++node4) {
+          if (metrics_map.at(node1).at(node4).k5 < THRESHOLD || metrics_map.at(node2).at(node4).k5 < THRESHOLD ||
+              metrics_map.at(node3).at(node4).k5 < THRESHOLD) {
+            continue;
+          }
+
+          for (size_t node5 = node4 + 1; node5 < nodes_number; ++node5) {
+            if (metrics_map.at(node1).at(node5).k5 < THRESHOLD || metrics_map.at(node2).at(node5).k5 < THRESHOLD ||
+                metrics_map.at(node3).at(node5).k5 < THRESHOLD || metrics_map.at(node4).at(node5).k5 < THRESHOLD) {
+              continue;
+            }
+
+            k5_sum += metrics_map.at(node1).at(node2).k5 * metrics_map.at(node1).at(node3).k5 *
+                      metrics_map.at(node1).at(node4).k5 * metrics_map.at(node1).at(node5).k5 *
+                      metrics_map.at(node2).at(node3).k5 * metrics_map.at(node2).at(node4).k5 *
+                      metrics_map.at(node2).at(node5).k5 * metrics_map.at(node3).at(node4).k5 *
+                      metrics_map.at(node3).at(node5).k5 * metrics_map.at(node4).at(node5).k5;
+          }
+        }
+      }
+    }
+  }
+
+  return {.k33 = k33_sum, .k5 = k5_sum};
 }
 
 template <size_t MAX_DEG>
@@ -265,26 +358,64 @@ float AvoidingKuratowskiGraphsPainter::calculatePathImpact(BAGraph& graph, std::
   return result;
 }
 
-float AvoidingKuratowskiGraphsPainter::phi(size_t k) {
-  //  if (k < 2) {
-  //	return 1;
-  //  }
-  //
-  //  return 2.0F / static_cast<float>(k * (k - 1));
-
-  //    return 1;
-
-  if (k < 2) {
+float AvoidingKuratowskiGraphsPainter::phi(size_t node_degree) {
+  if (node_degree < 2) {
     return 1;
   }
 
-  return 1.0F / static_cast<float>(k - 1);  // TODO: change to 1 / (k choose 2)
+  return 1.0F / static_cast<float>(node_degree - 1);
+  //  return 2.0F / static_cast<float>(node_degree * (node_degree - 1));
+  //  return 1;
 }
 
 template <size_t MAX_DEG>
-float AvoidingKuratowskiGraphsPainter::psi(size_t k) {
-  return static_cast<float>(k) / static_cast<float>(MAX_DEG);
-  //  return static_cast<float>(std::min(k, MAX_DEG)) / static_cast<float>(MAX_DEG);
+float AvoidingKuratowskiGraphsPainter::psi(size_t node_degree) {
+  //  return static_cast<float>(node_degree) / static_cast<float>(MAX_DEG);
+  return static_cast<float>(std::min(node_degree, MAX_DEG)) / static_cast<float>(MAX_DEG);
 }
 
+size_t AvoidingKuratowskiGraphsPainter::binomial(size_t n_value, size_t k_value) {
+  if (k_value > n_value) {
+    return 0;
+  }
+
+  if (2 * k_value > n_value) {
+    return binomial(n_value, n_value - k_value);
+  }
+
+  size_t result{n_value};
+  for (size_t i = 1; i < k_value; ++i) {
+    result *= (n_value - i);
+    result /= (i + 1);
+  }
+
+  return result;
+}
+
+size_t AvoidingKuratowskiGraphsPainter::factorial(size_t n_value) {
+  size_t result{1};
+  for (size_t i = 1; i <= n_value; ++i) {
+    result *= i;
+  }
+
+  return result;
+}
+
+void AvoidingKuratowskiGraphsPainter::iterateOverSubsets(const std::vector<size_t>& elements, size_t target_size,
+                                                         const std::function<void(const std::vector<size_t>&)>& callback) {
+
+  std::vector<bool> mask(elements.size());
+  std::fill(mask.end() - static_cast<std::iterator_traits<std::vector<bool>::iterator>::difference_type>(target_size), mask.end(),
+            true);
+
+  do {
+    std::vector<size_t> currentSubset;
+    for (size_t i = 0; i < elements.size(); ++i) {
+      if (mask[i]) {
+        currentSubset.push_back(elements[i]);
+      }
+    }
+    callback(currentSubset);
+  } while (std::next_permutation(mask.begin(), mask.end()));
+}
 }  // namespace graph::random

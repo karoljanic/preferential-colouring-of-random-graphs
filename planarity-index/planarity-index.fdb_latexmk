@@ -1,10 +1,11 @@
 # Fdb version 4
-["pdflatex"] 1722379867.95268 "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/planarity-index/planarity-index.tex" "planarity-index.pdf" "planarity-index" 1722379868.75499 0
-  "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/planarity-index/planarity-index.tex" 1722379867.44036 880 71178a10ac06db7231c050913937697d ""
+["pdflatex"] 1722441667.94679 "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/planarity-index/planarity-index.tex" "planarity-index.pdf" "planarity-index" 1722441668.4782 0
+  "/home/karoljanic/Documents/preferential-colouring-of-random-graphs/planarity-index/planarity-index.tex" 1722441667.74259 2160 cedfcba0de2e304302c064ad0da15564 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plme.enc" 1716849630 3126 59f33ff3e396436ebc36f4e7b444d5c4 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plmi.enc" 1716849630 2005 f094775651a1386335c158fb632529f1 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plms.enc" 1716849630 2468 3f9e2f3088bcf5b581dfc367d71e7d95 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/pl/plrm.enc" 1716849630 1944 1845592c00bbe510359fd6887a83ff72 ""
+  "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1716849630 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1716849630 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1716849630 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "/usr/share/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1716849630 928 2dc8d444221b7a635bb58038579b861a ""
@@ -169,11 +170,11 @@
   "/usr/share/texmf-dist/tex/latex/url/url.sty" 1716849630 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty" 1716849630 55487 80a65caedd3722f4c20a14a69e785d8f ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1716849630 41588 b43d3e860a4f94167ee1e725ff526a72 ""
-  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1716880519.65669 35853 3af76b4c375808d3bd51e191f36f3992 ""
-  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1716880511 7126277 192bef1b98f99963ca443dd8345b33d2 ""
-  "planarity-index.aux" 1722379868.65369 598 e37825fd720b13887b1241315fda192e "pdflatex"
-  "planarity-index.out" 1722379868.65703 411 03f18b684c7893c7334c7f8c30c77f05 "pdflatex"
-  "planarity-index.tex" 1722379867.44036 880 71178a10ac06db7231c050913937697d ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1716880877.79923 5317844 8761e26cd5827a3d8014d1efdc0c7e7b ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1716880875 7126276 505a9e3ab3cb459d21729a02fadad1ca ""
+  "planarity-index.aux" 1722441668.41258 599 3056cf37140c7cd1022ed1abb953d76b "pdflatex"
+  "planarity-index.out" 1722441668.41258 416 1537269ec24c2aeab540994d384f0fe3 "pdflatex"
+  "planarity-index.tex" 1722441667.74259 2160 cedfcba0de2e304302c064ad0da15564 ""
   (generated)
   "planarity-index.aux"
   "planarity-index.log"
