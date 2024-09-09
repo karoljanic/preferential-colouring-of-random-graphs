@@ -11,16 +11,16 @@ ColorsBalanceGloballyPainter::ColorsBalanceGloballyPainter(std::vector<ColorType
 void ColorsBalanceGloballyPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
   if (graph.getEdgesNumber() == 0) {
     std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
-    ColorType color = edges_colors_[distribution(generator_)];
+    const ColorType color = edges_colors_[distribution(generator_)];
     edge.color = color;
     ++colors_histogram_[color];
   }
   else {
     std::uniform_real_distribution<float> distribution{0.0F, 1.0F};
-    float r = distribution(generator_);
+    const float r = distribution(generator_);
     float cumulative_probability = 0.0F;
     for (const auto& [color, count] : colors_histogram_) {
-      float probability = static_cast<float>(graph.getEdgesNumber() - count) /
+      const float probability = static_cast<float>(graph.getEdgesNumber() - count) /
                           static_cast<float>((edges_colors_.size() - 1) * graph.getEdgesNumber());
       cumulative_probability += probability;
 

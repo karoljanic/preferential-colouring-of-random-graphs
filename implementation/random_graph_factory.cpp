@@ -22,10 +22,10 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentRepeat
   BAGraph graph;
   std::vector<size_t> repeated_nodes;
 
-  size_t central_node_id = graph.addNode();
+  const size_t central_node_id = graph.addNode();
   painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     graph.addEdge(node_id, central_node_id);
@@ -36,14 +36,14 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentRepeat
   }
 
   while (graph.getNodesNumber() < final_nodes_number) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     size_t edges_added{0};
     std::vector<size_t> selected_nodes;
     std::uniform_int_distribution<size_t> repeated_node_distribution{0, repeated_nodes.size() - 1};
     while (edges_added < edges_per_new_node_number) {
-      size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator_)];
+      const size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator_)];
       if (std::find(selected_nodes.begin(), selected_nodes.end(), selected_node_id) == selected_nodes.end()) {
         selected_nodes.push_back(selected_node_id);
         if (!graph.edgeExists(node_id, selected_node_id)) {
@@ -83,14 +83,14 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
   std::vector<size_t> degrees(final_nodes_number, 0);
 
   // initialize n0 connected nodes
-  for (size_t v = 0; v < initial_nodes_number; ++v) {
-    nodes.push_back(v);
-    nodes.push_back((v + 1) % initial_nodes_number);
-    degrees[v]++;
-    degrees[(v + 1) % initial_nodes_number]++;
+  for (size_t node = 0; node < initial_nodes_number; ++node) {
+    nodes.push_back(node);
+    nodes.push_back((node + 1) % initial_nodes_number);
+    degrees[node]++;
+    degrees[(node + 1) % initial_nodes_number]++;
   }
 
-  for (size_t v = initial_nodes_number; v < final_nodes_number; ++v) {
+  for (size_t node = initial_nodes_number; node < final_nodes_number; ++node) {
     // If we were to update the range in the next loop, the additionally available nodes
     // would only lead to self-loops are multi-edges.
     std::uniform_int_distribution<size_t> dist{0, nodes.size() - 1};
@@ -115,9 +115,9 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentBatage
         }
 
         if (!alreadyIncident) {
-          nodes.push_back(v);
+          nodes.push_back(node);
           nodes.push_back(newNeighbor);
-          degrees[v]++;
+          degrees[node]++;
           degrees[newNeighbor]++;
           break;
         }
@@ -191,10 +191,10 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
   }
 
   BAGraph graph;
-  size_t central_node_id = graph.addNode();
+  const size_t central_node_id = graph.addNode();
   painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     graph.addEdge(node_id, central_node_id);
@@ -202,7 +202,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
   }
 
   while (graph.getNodesNumber() < final_nodes_number) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     size_t edges_added{0};
@@ -248,10 +248,10 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
   }
 
   BAGraph graph;
-  size_t central_node_id = graph.addNode();
+  const size_t central_node_id = graph.addNode();
   painter->paintNode(graph, graph.getNode(central_node_id));
   for (size_t i = 1; i < initial_nodes_number; ++i) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     graph.addEdge(node_id, central_node_id);
@@ -260,7 +260,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 
   std::uniform_real_distribution<float> option_distribution{0.0F, 1.0F};
   while (graph.getNodesNumber() < final_nodes_number) {
-    size_t node_id = graph.addNode();
+    const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));
 
     size_t edges_added{0};

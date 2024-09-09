@@ -121,16 +121,16 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(BAGraph& graph,
 void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(BAGraph& graph,
                                                                 AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
   MetricsMap new_metrics_map{metrics_map};
-  size_t mm_size{metrics_map.size()};
+  const size_t mm_size{metrics_map.size()};
 
-  BAEdge& last_added_edge = graph.getLastAddedEdge();  // source is added earlier than target
-  size_t source{last_added_edge.target};
-  size_t target{last_added_edge.source};
+  const BAEdge& last_added_edge = graph.getLastAddedEdge();  // source is added earlier than target
+  const size_t source{last_added_edge.target};
+  const size_t target{last_added_edge.source};
 
   std::cout << "New edge: " << source << " -> " << target << std::endl;
 
-  std::vector<BANode> source_neighbours = graph.getNeighbours(source);
-  std::vector<BANode> target_neighbours = graph.getNeighbours(target);
+  const std::vector<BANode> source_neighbours = graph.getNeighbours(source);
+  const std::vector<BANode> target_neighbours = graph.getNeighbours(target);
 
   std::cout << "Source(" << source << ")"
             << " neighbours: " << source_neighbours.size() << std::endl;
@@ -139,8 +139,8 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(BAGraph& graph,
   std::cout << std::endl;
 
   if (source_neighbours.size() == 1 && target_neighbours.size() == 1) {
-    float k33 = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
-    float k5 = psi<K5_MAX_DEG>(1) * psi<K5_MAX_DEG>(1);
+    const float k33 = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
+    const float k5 = psi<K5_MAX_DEG>(1) * psi<K5_MAX_DEG>(1);
 
     new_metrics_map[source][target].k33 = k33;
     new_metrics_map[target][source].k33 = k33;
@@ -156,14 +156,14 @@ void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(BAGraph& graph,
         continue;
       }
 
-      float val = metrics_map[node][target].k33 / psi<K33_MAX_DEG>(graph.getDegree(target) - 1) *
+      const float val = metrics_map[node][target].k33 / psi<K33_MAX_DEG>(graph.getDegree(target) - 1) *
                   psi<K33_MAX_DEG>(graph.getDegree(source)) * phi(graph.getDegree(target));
       new_metrics_map[node][source].k33 += val;
       new_metrics_map[source][node].k33 += val;
     }
 
     // expand metric for path source -> target
-    float val = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
+    const float val = psi<K33_MAX_DEG>(1) * psi<K33_MAX_DEG>(1);
     new_metrics_map[source][target].k33 += val;
     new_metrics_map[target][source].k33 += val;
   }

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Graphs)
 
+set(OUTPUT "../graphs")
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
@@ -16,3 +18,5 @@ set(SOURCE_FILES
         avoiding_kuratowski_graphs_painter.cpp)
 
 add_executable(Graphs ${SOURCE_FILES})
+
+set_target_properties(Graphs PROPERTIES OUTPUT_NAME ${OUTPUT})

@@ -26,16 +26,16 @@ void ColorsBalanceLocallyPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
 
   if (total == 0) {
     std::uniform_int_distribution<size_t> distribution{0, edges_colors_.size() - 1};
-    ColorType color = edges_colors_[distribution(generator_)];
+    const ColorType color = edges_colors_[distribution(generator_)];
     edge.color = color;
     ++colors_histogram_[color];
   }
   else {
     std::uniform_real_distribution<float> distribution{0.0F, 1.0F};
-    float r = distribution(generator_);
+    const float r = distribution(generator_);
     float cumulative_probability = 0.0F;
     for (const auto& color : edges_colors_) {
-      float probability =
+      const float probability =
           static_cast<float>(total - local_colors_histogram[color]) / static_cast<float>((edges_colors_.size() - 1) * total);
       cumulative_probability += probability;
 

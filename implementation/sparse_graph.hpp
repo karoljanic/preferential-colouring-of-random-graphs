@@ -55,8 +55,8 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
   }
 
   [[nodiscard]] bool edgeExists(size_t node1_id, size_t node2_id) const override {
-    size_t source = node1_id < node2_id ? node1_id : node2_id;
-    size_t target = node1_id < node2_id ? node2_id : node1_id;
+    const size_t source = node1_id < node2_id ? node1_id : node2_id;
+    const size_t target = node1_id < node2_id ? node2_id : node1_id;
 
     return std::ranges::any_of(adjacency_list_[source],
                                [&](size_t index) { return edges_[index].source == source && edges_[index].target == target; });
@@ -91,7 +91,7 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
   [[nodiscard]] std::vector<NodeType> getNeighbours(size_t node_id) const override {
     std::vector<NodeType> neighbours;
-    for (size_t index : adjacency_list_[node_id]) {
+    for (const size_t index : adjacency_list_[node_id]) {
       if (edges_[index].source == node_id) {
         neighbours.emplace_back(nodes_[edges_[index].target]);
       }
@@ -136,14 +136,14 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
     stack.push(start_node_id);
     while (!stack.empty()) {
-      size_t node_id = stack.top();
+      const size_t node_id = stack.top();
       stack.pop();
 
       if (!visited[node_id]) {
         callback(nodes_[node_id]);
         visited[node_id] = true;
 
-        for (size_t neighbor_index : adjacency_list_.at(node_id)) {
+        for (const size_t neighbor_index : adjacency_list_.at(node_id)) {
           const EdgeType& neighbor = edges_[neighbor_index];
           if (neighbor_index == neighbor.source) {
             if (!visited[neighbor.target]) {
@@ -166,14 +166,14 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
     queue.push(start_node_id);
     while (!queue.empty()) {
-      size_t node_id = queue.front();
+      const size_t node_id = queue.front();
       queue.pop();
 
       if (!visited[node_id]) {
         callback(nodes_[node_id]);
         visited[node_id] = true;
 
-        for (size_t neighbor_index : adjacency_list_.at(node_id)) {
+        for (const size_t neighbor_index : adjacency_list_.at(node_id)) {
           const EdgeType& neighbor = edges_[neighbor_index];
           if (neighbor_index == neighbor.source) {
             if (!visited[neighbor.target]) {

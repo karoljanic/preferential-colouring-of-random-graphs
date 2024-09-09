@@ -1,7 +1,1 @@
-.idea
-cmake-build-debug
-build
-generategraph
-generatecolorgraph
-graph.json
-out
+out/
