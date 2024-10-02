@@ -87,8 +87,9 @@ void saveMetrics(const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics, std
 
 void saveTimes(const AvoidingKuratowskiGraphsPainter& painter, const std::string& file_name) {
   std::ofstream file{file_name};
-  for (const auto& time_pair : painter.getColoringTimes()) {
-    file << time_pair.first << " " << time_pair.second << std::endl;
+  for (const auto& time : painter.getColoringTimes()) {
+    file << time.edges_number << " " << time.total_time << " " << time.metrics_calculation_time << " " << time.metrics_merge_time
+         << std::endl;
   }
 }
 
