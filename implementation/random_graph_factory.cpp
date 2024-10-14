@@ -42,6 +42,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithPreferentialAttachmentRepeat
     size_t edges_added{0};
     std::vector<size_t> selected_nodes;
     std::uniform_int_distribution<size_t> repeated_node_distribution{0, repeated_nodes.size() - 1};
+    
     while (edges_added < edges_per_new_node_number) {
       const size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator_)];
       if (std::find(selected_nodes.begin(), selected_nodes.end(), selected_node_id) == selected_nodes.end()) {

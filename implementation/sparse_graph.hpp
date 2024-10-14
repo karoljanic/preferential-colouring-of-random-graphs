@@ -66,6 +66,8 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
   [[nodiscard]] NodeType& getLastAddedNode() override { return nodes_.back(); }
 
+  [[nodiscard]] std::vector<NodeType> getNodes() const override { return nodes_; }
+
   [[nodiscard]] EdgeType& getEdge(size_t source, size_t target) override {
     auto iter = std::find_if(adjacency_list_[source].begin(), adjacency_list_[source].end(), [&](size_t index) {
       return (edges_[index].source == source && edges_[index].target == target) ||
@@ -80,6 +82,8 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
   }
 
   [[nodiscard]] EdgeType& getLastAddedEdge() override { return edges_.back(); }
+
+  [[nodiscard]] std::vector<EdgeType> getEdges() const override { return edges_; }
 
   [[nodiscard]] size_t getNodesNumber() const override { return nodes_.size(); }
 
@@ -229,6 +233,27 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
     file << "    { }" << std::endl;
 
     file << "  ]" << std::endl << "}" << std::endl;
+  }
+
+  int loadFromFile(const std::string& filename) override {
+    try {
+      std::ifstream input_file(filename);
+      json graph_data;
+      input_file >> graph_data;
+
+      for (const auto& node : graph_data["nodes"]) {
+        addNode();
+      }
+
+      for (const auto& edge : graph_data["edges"]) {
+        addEdge(edge["source"], edge["target"]);
+      }
+    } catch (const std::exception& e) {
+      std::cerr << e.what() << std::endl;
+      return 1;
+    }
+
+    return 0;
   }
 
  private:

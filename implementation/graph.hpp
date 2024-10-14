@@ -8,6 +8,9 @@
 #include <string>      // std::string
 #include <vector>      // std::vector
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 namespace graph {
 template <typename T>
 concept HasId = requires(T t) {
@@ -39,9 +42,11 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class Graph {
 
   [[nodiscard]] virtual NodeType& getNode(size_t node_id) = 0;
   [[nodiscard]] virtual NodeType& getLastAddedNode() = 0;
+  [[nodiscard]] virtual std::vector<NodeType> getNodes() const = 0;
 
   [[nodiscard]] virtual EdgeType& getEdge(size_t source, size_t target) = 0;
   [[nodiscard]] virtual EdgeType& getLastAddedEdge() = 0;
+  [[nodiscard]] virtual std::vector<EdgeType> getEdges() const = 0;
 
   [[nodiscard]] virtual size_t getNodesNumber() const = 0;
   [[nodiscard]] virtual size_t getEdgesNumber() const = 0;
@@ -59,6 +64,8 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class Graph {
   virtual void saveToFile(const std::string& filename) const = 0;
   virtual void saveToFile(const std::string& filename, std::function<void(std::ofstream& file, const NodeType&)> vertexCallback,
                           std::function<void(std::ofstream& file, const EdgeType&)> edgeCallback) const = 0;
+
+  virtual int loadFromFile(const std::string& filename) = 0;
 };
 }  // namespace graph
 

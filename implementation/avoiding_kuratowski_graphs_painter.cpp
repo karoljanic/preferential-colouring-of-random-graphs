@@ -1,14 +1,13 @@
 #include "avoiding_kuratowski_graphs_painter.hpp"
 
-#include <chrono>
+#include <chrono>  // std::chrono
 #include <limits>  // std::numeric_limits
-#include <queue>   // std::queue
 #include <stack>   // std::stack
 #include <vector>  // std::vector
 
 namespace graph::random {
-AvoidingKuratowskiGraphsPainter::AvoidingKuratowskiGraphsPainter(std::vector<ColorType> edges_colors)
-    : GraphPainter({}, std::move(edges_colors)) {
+AvoidingKuratowskiGraphsPainter::AvoidingKuratowskiGraphsPainter(std::vector<ColorType> edges_colors, MetricType metric_type)
+    : GraphPainter({}, std::move(edges_colors)), metric_type_(metric_type) {
 
   for (const auto& edges_color : edges_colors_) {
     embeddings_[edges_color] = BAGraph{};
@@ -42,41 +41,50 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
     BAGraph embedding_copy{embeddings_[edges_color]};
     embedding_copy.addEdge(edge.source, edge.target);
 
-    //	updateShortestPathsMetric(embedding_copy, metrics_map_copy);
-    updateAllPathsMetric(embedding_copy, metrics_map_copy[edges_color]);
-    //    updateAllPathsMetricSmart(embedding_copy, metrics_map_copy[edges_color]);
+    MetricCalculator::calculate(metric_type_, embedding_copy, metrics_map_copy[edges_color]);
   }
 
   auto end_metrics_calculation = std::chrono::high_resolution_clock::now();
 
+  std::cout << std::endl;
   for (const auto& edges_color : edges_colors_) {
-    //        const Metric metric = productSubgraphMetric(metrics_map_copy[edges_color]);
-    const Metric metric = sumMetric(metrics_map_copy[edges_color]);
-    metrics[edges_color] = metric.k33 + metric.k5;
+    const Metric metric = sumMetrics(metrics_map_copy[edges_color]);
+//    const Metric metric = productSubgraphMetrics(metrics_map_copy[edges_color]);
+
+    metrics[edges_color] = metric.k33;
+//    metrics[edges_color] = metric.k33 + metric.k5;
+    std::cout << "Color: " << edges_color.hex << " metric: " << metrics[edges_color] << std::endl;
   }
 
   auto end_metrics_merge = std::chrono::high_resolution_clock::now();
 
-  float max_metric_value{std::numeric_limits<float>::max()};
+//  float lowest_metric_value{std::numeric_limits<float>::max()};
+//  for (const auto& edges_color : edges_colors_) {
+//    if (lowest_metric_value > metrics[edges_color]) {
+//      lowest_metric_value = metrics[edges_color];
+//    }
+//  }
+
+  float lowest_metric_value{std::numeric_limits<float>::lowest()};
   for (const auto& edges_color : edges_colors_) {
-    if (max_metric_value > metrics[edges_color]) {
-      max_metric_value = metrics[edges_color];
+    if (lowest_metric_value < metrics[edges_color]) {
+      lowest_metric_value = metrics[edges_color];
     }
   }
 
-  std::vector<ColorType> max_colors;
+  std::vector<ColorType> low_colors;
   for (const auto& edges_color : edges_colors_) {
-    if (std::fabs(max_metric_value - metrics[edges_color]) < EPSILON) {
-      max_colors.push_back(edges_color);
+    if (std::fabs(lowest_metric_value - metrics[edges_color]) < EPSILON) {
+      low_colors.push_back(edges_color);
     }
   }
 
-  std::uniform_int_distribution<size_t> distribution(0, max_colors.size() - 1);
+  std::uniform_int_distribution<size_t> distribution(0, low_colors.size() - 1);
   const size_t index = distribution(generator_);
-  embeddings_[max_colors[index]].addEdge(edge.source, edge.target);
-  edge.color = max_colors[index];
-  embeddings_[max_colors[index]].getEdge(edge.source, edge.target).color = max_colors[index];
-  metrics_map_[max_colors[index]] = metrics_map_copy[max_colors[index]];
+  embeddings_[low_colors[index]].addEdge(edge.source, edge.target);
+  edge.color = low_colors[index];
+  embeddings_[low_colors[index]].getEdge(edge.source, edge.target).color = low_colors[index];
+  metrics_map_[low_colors[index]] = metrics_map_copy[low_colors[index]];
 
   auto end_coloring = std::chrono::high_resolution_clock::now();
 
@@ -91,174 +99,14 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
                                     .metrics_calculation_time = static_cast<float>(metrics_calculation_duration.count()),
                                     .metrics_merge_time = static_cast<float>(metrics_merge_duration.count())});
 
-  std::cout << "Painting edge: " << edge.source << " " << edge.target << " to " << max_colors[index].hex << std::endl;
+  std::cout << "Painting edge: " << edge.source << " " << edge.target << " to " << low_colors[index].hex << std::endl;
 }
 
-void AvoidingKuratowskiGraphsPainter::reset() {}
-
-void AvoidingKuratowskiGraphsPainter::updateAllPathsMetric(BAGraph& graph,
-                                                           AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
-  metrics_map.clear();
-  for (size_t node_v = 0; node_v < graph.getNodesNumber(); ++node_v) {
-    metrics_map[node_v] = std::map<size_t, Metric>();
-    for (size_t node_u = 0; node_u < graph.getNodesNumber(); ++node_u) {
-      metrics_map[node_v][node_u] = Metric{};
-    }
-  }
-
-  for (size_t source = 0; source < graph.getNodesNumber(); ++source) {
-    std::vector<bool> visited(graph.getNodesNumber(), false);
-    std::vector<size_t> path;
-
-    getAllPathsUtil(graph, source, visited, path, [&](const std::vector<size_t>& path) {
-      const float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path);
-      metrics_map[path.front()][path.back()].k33 = std::max(metrics_map[path.front()][path.back()].k33, k33_factor);
-      metrics_map[path.back()][path.front()].k33 = std::max(metrics_map[path.back()][path.front()].k33, k33_factor);
-      //      metrics_map[path.front()][path.back()].k33 += k33_factor;
-      //      metrics_map[path.back()][path.front()].k33 += k33_factor;
-
-      const float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path);
-      metrics_map[path.front()][path.back()].k5 = std::max(metrics_map[path.front()][path.back()].k5, k5_factor);
-      metrics_map[path.back()][path.front()].k5 = std::max(metrics_map[path.back()][path.front()].k5, k5_factor);
-      //      metrics_map[path.front()][path.back()].k5 += k5_factor;
-      //      metrics_map[path.back()][path.front()].k5 += k5_factor;
-    });
-  }
+void AvoidingKuratowskiGraphsPainter::reset() {
+  *this = AvoidingKuratowskiGraphsPainter(edges_colors_, metric_type_);
 }
 
-void AvoidingKuratowskiGraphsPainter::updateAllPathsMetricSmart(BAGraph& graph,
-                                                                AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
-  constexpr float max_path_length_coefficient = 2.0;
-  const size_t max_path_length = static_cast<size_t>(max_path_length_coefficient * std::log2(graph.getNodesNumber()));
-
-  metrics_map.clear();
-  for (size_t node_v = 0; node_v < graph.getNodesNumber(); ++node_v) {
-    metrics_map[node_v] = std::map<size_t, Metric>();
-    for (size_t node_u = 0; node_u < graph.getNodesNumber(); ++node_u) {
-      metrics_map[node_v][node_u] = Metric{};
-    }
-  }
-
-  for (size_t source = 0; source < graph.getNodesNumber(); ++source) {
-    std::vector<bool> visited(graph.getNodesNumber(), false);
-    std::vector<size_t> path;
-
-    getAllPathsWithMaxLengthUtil(graph, source, visited, path, max_path_length, [&](const std::vector<size_t>& path) {
-      const float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
-      metrics_map[path.front()][path.back()].k33 += k33_factor;
-      metrics_map[path.back()][path.front()].k33 += k33_factor;
-
-      const float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
-      metrics_map[path.front()][path.back()].k5 += k5_factor;
-      metrics_map[path.back()][path.front()].k5 += k5_factor;
-    });
-  }
-}
-
-void AvoidingKuratowskiGraphsPainter::updateShortestPathsMetric(BAGraph& graph,
-                                                                AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
-  metrics_map.clear();
-  for (size_t node_v = 0; node_v < graph.getNodesNumber(); ++node_v) {
-    metrics_map[node_v] = std::map<size_t, Metric>();
-    for (size_t node_u = 0; node_u < graph.getNodesNumber(); ++node_u) {
-      metrics_map[node_v][node_u] = Metric{};
-    }
-  }
-
-  for (size_t source = 0; source < graph.getNodesNumber(); ++source) {
-    std::vector<size_t> distances(graph.getNodesNumber(), std::numeric_limits<size_t>::max());
-    std::vector<std::vector<size_t>> predecessors(graph.getNodesNumber(), std::vector<size_t>());
-    std::queue<size_t> queue;
-
-    distances[source] = 0;
-    queue.push(source);
-
-    while (!queue.empty()) {
-      const size_t node = queue.front();
-      queue.pop();
-
-      for (const auto& neighbor : graph.getNeighbours(node)) {
-        if (distances[neighbor.id] == std::numeric_limits<size_t>::max()) {
-          distances[neighbor.id] = distances[node] + 1;
-          predecessors[neighbor.id].push_back(node);
-          queue.push(neighbor.id);
-        }
-        else if (distances[neighbor.id] == distances[node] + 1) {
-          predecessors[neighbor.id].push_back(node);
-        }
-      }
-    }
-
-    for (size_t target = 0; target < graph.getNodesNumber(); ++target) {
-      std::stack<std::vector<size_t>> paths;
-      paths.push({target});
-
-      while (!paths.empty()) {
-        std::vector<size_t> path = paths.top();
-        paths.pop();
-        const size_t last = path.back();
-
-        if (last == source) {
-          const float k33_factor = calculatePathImpact<K33_MAX_DEG>(graph, path) * 0.5F;
-          metrics_map[path.front()][path.back()].k33 += k33_factor;
-          metrics_map[path.back()][path.front()].k33 += k33_factor;
-
-          const float k5_factor = calculatePathImpact<K5_MAX_DEG>(graph, path) * 0.5F;
-          metrics_map[path.front()][path.back()].k5 += k5_factor;
-          metrics_map[path.back()][path.front()].k5 += k5_factor;
-        }
-        else {
-          for (const size_t pred : predecessors[last]) {
-            std::vector<size_t> new_path = path;
-            new_path.push_back(pred);
-            paths.push(new_path);
-          }
-        }
-      }
-    }
-  }
-}
-
-void AvoidingKuratowskiGraphsPainter::getAllPathsUtil(BAGraph& graph, size_t node, std::vector<bool>& visited,
-                                                      std::vector<size_t>& path,
-                                                      const std::function<void(const std::vector<size_t>&)>& callback) {
-  visited[node] = true;
-  path.push_back(node);
-
-  callback(path);
-
-  for (const auto& neighbor : graph.getNeighbours(node)) {
-    if (!visited[neighbor.id]) {
-      getAllPathsUtil(graph, neighbor.id, visited, path, callback);
-    }
-  }
-
-  path.pop_back();
-  visited[node] = false;
-}
-
-void AvoidingKuratowskiGraphsPainter::getAllPathsWithMaxLengthUtil(
-    BAGraph& graph, size_t node, std::vector<bool>& visited, std::vector<size_t>& path, size_t max_length,
-    const std::function<void(const std::vector<size_t>&)>& callback) {
-  visited[node] = true;
-  path.push_back(node);
-
-  if (path.size() <= max_length) {
-    callback(path);
-
-    for (const auto& neighbor : graph.getNeighbours(node)) {
-      if (!visited[neighbor.id]) {
-        getAllPathsWithMaxLengthUtil(graph, neighbor.id, visited, path, max_length, callback);
-      }
-    }
-  }
-
-  path.pop_back();
-  visited[node] = false;
-}
-
-AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::sumMetric(
-    const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
+Metric AvoidingKuratowskiGraphsPainter::sumMetrics(const MetricsMap& metrics_map) {
   float k33_sum{0.0F};
   float k5_sum{0.0F};
 
@@ -272,9 +120,8 @@ AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::sumMetr
   return {.k33 = k33_sum, .k5 = k5_sum};
 }
 
-AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::productSubgraphMetric(
-    const AvoidingKuratowskiGraphsPainter::MetricsMap& metrics_map) {
-  constexpr float THRESHOLD{0.25F};
+Metric AvoidingKuratowskiGraphsPainter::productSubgraphMetrics(const MetricsMap& metrics_map) {
+  constexpr float THRESHOLD{0.1F};
 
   float k33_sum{0.0F};
   float k5_sum{0.0F};
@@ -348,7 +195,7 @@ AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::product
               continue;
             }
 
-            k5_sum += metrics_map.at(node1).at(node2).k5 * metrics_map.at(node1).at(node3).k5 *
+            k5_sum += 0.5F * metrics_map.at(node1).at(node2).k5 * metrics_map.at(node1).at(node3).k5 *
                       metrics_map.at(node1).at(node4).k5 * metrics_map.at(node1).at(node5).k5 *
                       metrics_map.at(node2).at(node3).k5 * metrics_map.at(node2).at(node4).k5 *
                       metrics_map.at(node2).at(node5).k5 * metrics_map.at(node3).at(node4).k5 *
@@ -360,83 +207,5 @@ AvoidingKuratowskiGraphsPainter::Metric AvoidingKuratowskiGraphsPainter::product
   }
 
   return {.k33 = k33_sum, .k5 = k5_sum};
-}
-
-template <size_t MAX_DEG>
-float AvoidingKuratowskiGraphsPainter::calculatePathImpact(BAGraph& graph, const std::vector<size_t>& path) {
-  if (path.size() < 2) {
-    return 0;
-  }
-
-  float result{1.0F};
-  result *= psi<MAX_DEG>(graph.getDegree(path.front()));
-  result *= psi<MAX_DEG>(graph.getDegree(path.back()));
-
-  for (size_t i = 1; i < (path.size() - 1); ++i) {
-    result *= phi(graph.getDegree(path.at(i)));
-  }
-
-  return result;
-}
-
-float AvoidingKuratowskiGraphsPainter::phi(size_t node_degree) {
-  if (node_degree < 2) {
-    return 1;
-  }
-
-  return 1.0F / static_cast<float>(node_degree - 1);
-  //  return 2.0F / static_cast<float>(node_degree * (node_degree - 1));
-  //  return 1;
-}
-
-template <size_t MAX_DEG>
-float AvoidingKuratowskiGraphsPainter::psi(size_t node_degree) {
-  //  return static_cast<float>(node_degree) / static_cast<float>(MAX_DEG);
-  return static_cast<float>(std::min(node_degree, MAX_DEG)) / static_cast<float>(MAX_DEG);
-}
-
-size_t AvoidingKuratowskiGraphsPainter::binomial(size_t n_value, size_t k_value) {
-  if (k_value > n_value) {
-    return 0;
-  }
-
-  if (2 * k_value > n_value) {
-    return binomial(n_value, n_value - k_value);
-  }
-
-  size_t result{n_value};
-  for (size_t i = 1; i < k_value; ++i) {
-    result *= (n_value - i);
-    result /= (i + 1);
-  }
-
-  return result;
-}
-
-size_t AvoidingKuratowskiGraphsPainter::factorial(size_t n_value) {
-  size_t result{1};
-  for (size_t i = 1; i <= n_value; ++i) {
-    result *= i;
-  }
-
-  return result;
-}
-
-void AvoidingKuratowskiGraphsPainter::iterateOverSubsets(const std::vector<size_t>& elements, size_t target_size,
-                                                         const std::function<void(const std::vector<size_t>&)>& callback) {
-
-  std::vector<bool> mask(elements.size());
-  std::fill(mask.end() - static_cast<std::iterator_traits<std::vector<bool>::iterator>::difference_type>(target_size), mask.end(),
-            true);
-
-  do {
-    std::vector<size_t> currentSubset;
-    for (size_t i = 0; i < elements.size(); ++i) {
-      if (mask[i]) {
-        currentSubset.push_back(elements[i]);
-      }
-    }
-    callback(currentSubset);
-  } while (std::next_permutation(mask.begin(), mask.end()));
 }
 }  // namespace graph::random
