@@ -18,9 +18,9 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
  public:
   struct TimeInfo {
     size_t edges_number;
-    float total_time;
-    float metrics_calculation_time;
-    float metrics_merge_time;
+    double total_time;
+    double metrics_calculation_time;
+    double metrics_merge_time;
   };
 
   AvoidingKuratowskiGraphsPainter() = default;
@@ -45,7 +45,7 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
 
  private:
   [[nodiscard]] static MetricCalculator::Metric sumMetrics(const MetricsMap& metrics_map);
-  [[nodiscard]] static MetricCalculator::Metric productSubgraphMetrics(const MetricsMap& metrics_map);
+  [[nodiscard]] static double scaleFinalMetric(Metric metric);
 
   std::mt19937 generator_{std::random_device{}()};
   MetricType metric_type_;
@@ -53,7 +53,7 @@ class AvoidingKuratowskiGraphsPainter : public GraphPainter {
   std::map<ColorType, MetricsMap> metrics_map_;
   std::vector<TimeInfo> coloring_times_vector_;
 
-  static constexpr float EPSILON{1e-6};
+  static constexpr double EPSILON{1e-6};
 };
 }  // namespace graph::random
 

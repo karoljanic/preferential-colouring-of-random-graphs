@@ -167,7 +167,7 @@ int generateAndCalculateMetricForGraph(char* argv[]) {
       initial_nodes, final_nodes, edges_per_vertex);
 
   MetricsMap metrics_map;
-  MetricCalculator::calculate(MetricCalculator::MetricType::MAX_FASTER, graph, metrics_map);
+  MetricCalculator::calculate(MetricCalculator::MetricType::EXPECTED, graph, metrics_map);
 
   saveGraph(graph, metrics_map, argv[5]);
 
@@ -184,139 +184,12 @@ int setMetricToGraph(char* argv[]) {
   MetricsMap metrics_map;
   MetricCalculator::calculate(MetricCalculator::MetricType::EXPECTED, graph, metrics_map);
 
-//  saveMetrics(metrics_map, std::cout);
-
   saveGraph(graph, metrics_map, output_graph_filename);
 
   return 0;
 }
 
-void debug() {
-  const size_t initial_nodes = 3;
-  const size_t edges_per_vertex = 2;
-  const size_t final_nodes = 12;
-
-  const int colors_numbers = 2;
-  const std::vector<ColorType> colors(allColors.begin(), allColors.begin() + colors_numbers);
-
-  RandomGraphFactory random_graph_factory;
-  const BAGraph graph = random_graph_factory.createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(
-      initial_nodes, final_nodes, edges_per_vertex);
-
-  MetricsMap max_metrics;
-  MetricCalculator::calculate(MetricCalculator::MetricType::ALL_PATHS, graph, max_metrics);
-
-  MetricsMap max_faster_metrics;
-  MetricCalculator::calculate(MetricCalculator::MetricType::EXPECTED, graph, max_faster_metrics);
-
-  for (size_t node = 0; node < graph.getNodesNumber(); ++node) {
-    std::cout << "Node " << node << "(" << graph.getDegree(node) << "):";
-    for (const auto& neighbor : graph.getNeighbours(node)) {
-      std::cout << "  " << neighbor.id << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  std::ofstream file1{"all_metrics.txt"};
-  saveMetrics(max_metrics, file1);
-
-  std::ofstream file2{"expected_metrics.txt"};
-  saveMetrics(max_faster_metrics, file2);
-
-  float k33_all_sum = 0.0F;
-  float k5_all_sum = 0.0F;
-  for (const auto& outer_pair : max_metrics) {
-    for (const auto& inner_pair : outer_pair.second) {
-      k33_all_sum += inner_pair.second.k33;
-      k5_all_sum += inner_pair.second.k5;
-    }
-  }
-
-  float k33_expected_sum = 0.0F;
-  float k5_expected_sum = 0.0F;
-  for (const auto& outer_pair : max_faster_metrics) {
-    for (const auto& inner_pair : outer_pair.second) {
-      k33_expected_sum += inner_pair.second.k33;
-      k5_expected_sum += inner_pair.second.k5;
-    }
-  }
-
-  std::cout << "All sum: " << k33_all_sum << " " << k5_all_sum << std::endl;
-  std::cout << "Expected sum: " << k33_expected_sum << " " << k5_expected_sum << std::endl;
-}
-
-void debug2() {
-  constexpr size_t initial_nodes = 3;
-  constexpr size_t edges_per_vertex = 2;
-  constexpr size_t final_nodes = 12;
-  constexpr size_t tries = 1000;
-
-  float k33_all_sum = 0.0F;
-  float k5_all_sum = 0.0F;
-  float k33_expected_sum = 0.0F;
-  float k5_expected_sum = 0.0F;
-  for (size_t i = 0; i < tries; ++i) {
-    RandomGraphFactory random_graph_factory;
-    const BAGraph graph = random_graph_factory.createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(
-        initial_nodes, final_nodes, edges_per_vertex);
-
-    MetricsMap max_metrics;
-    MetricCalculator::calculate(MetricCalculator::MetricType::ALL_PATHS, graph, max_metrics);
-    for (const auto& outer_pair : max_metrics) {
-      for (const auto& inner_pair : outer_pair.second) {
-        k33_all_sum += inner_pair.second.k33;
-        k5_all_sum += inner_pair.second.k5;
-      }
-    }
-
-    MetricsMap max_faster_metrics;
-    MetricCalculator::calculate(MetricCalculator::MetricType::EXPECTED, graph, max_faster_metrics);
-    for (const auto& outer_pair : max_faster_metrics) {
-      for (const auto& inner_pair : outer_pair.second) {
-        k33_expected_sum += inner_pair.second.k33;
-        k5_expected_sum += inner_pair.second.k5;
-      }
-    }
-  }
-
-  std::cout << "All sum: " << k33_all_sum / static_cast<float>(tries) << " " << k5_all_sum / static_cast<float>(tries)
-            << std::endl;
-  std::cout << "Expected sum: " << k33_expected_sum / static_cast<float>(tries) << " "
-            << k5_expected_sum / static_cast<float>(tries) << std::endl;
-}
-
-void debug3() {
-  const size_t initial_nodes = 3;
-  const size_t edges_per_vertex = 2;
-  const size_t final_nodes = 12;
-
-  RandomGraphFactory random_graph_factory;
-  const BAGraph graph = random_graph_factory.createBarabasiAlbertWithPreferentialAttachmentBatageljBrandes(
-      initial_nodes, final_nodes, edges_per_vertex);
-
-  MetricsMap all_metrics;
-  MetricCalculator::calculate(MetricCalculator::MetricType::ALL_PATHS, graph, all_metrics);
-
-  std::ofstream file{"v1.txt"};
-  saveMetrics(all_metrics, file);
-
-  graph.saveToFile(
-      "g.json", [](std::ofstream& /*file*/, const BANode& /*node*/) {}, [](std::ofstream& /*file*/, const BAEdge& /*node*/) {});
-}
-
-void debug4() {
-  BAGraph  graph;
-  graph.loadFromFile("g.json");
-
-  MetricsMap all_metrics;
-  MetricCalculator::calculate(MetricCalculator::MetricType::ALL_PATHS, graph, all_metrics);
-
-  std::ofstream file{"v1.txt"};
-  saveMetrics(all_metrics, file);
-}
-
 int main(int argc, char* argv[]) {
-//  debug4();
   if (argc < 2) {
     return 0;
   }

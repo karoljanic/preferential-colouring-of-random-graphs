@@ -50,7 +50,7 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class Graph {
 
   [[nodiscard]] virtual size_t getNodesNumber() const = 0;
   [[nodiscard]] virtual size_t getEdgesNumber() const = 0;
-  [[nodiscard]] virtual float getDensity() const = 0;
+  [[nodiscard]] virtual double getDensity() const = 0;
 
   [[nodiscard]] virtual std::vector<NodeType> getNeighbours(size_t node_id) const = 0;
   [[nodiscard]] virtual std::vector<EdgeType> getAdjacentEdges(size_t node_id) const = 0;

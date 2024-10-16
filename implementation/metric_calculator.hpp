@@ -12,11 +12,11 @@
 namespace graph::random {
 class MetricCalculator {
  public:
-  enum class MetricType { ALL_PATHS, GIVEN_SIZE_PATHS, MAX, GIVEN_SIZE_MAX, MAX_FASTER, EXPECTED, GIVEN_SIZE_EXPECTED };
+  enum class MetricType { ALL_PATHS, GIVEN_SIZE_PATHS, MAX, GIVEN_SIZE_MAX, MAX_FASTER, EXPECTED, SUM_OF_NEIGHBOURS_DEGREES };
 
   struct Metric {
-    float k33{0.0F};
-    float k5{0.0F};
+    double k33{0.0F};
+    double k5{0.0F};
   };
 
   typedef std::map<size_t, std::map<size_t, MetricCalculator::Metric>> MetricsMap;
@@ -40,7 +40,7 @@ class MetricCalculator {
   static void givenSizeMaxMetric(const BAGraph& graph, MetricsMap& metrics_map);
   static void maxMetricFaster(const BAGraph& graph, MetricsMap& metrics_map);
   static void expectedMetric(const BAGraph& graph, MetricsMap& metrics_map);
-  static void givenSizeExpectedMetric(const BAGraph& graph, MetricsMap& metrics_map);
+  static void sumOfNeighboursDegreesMetric(const BAGraph& graph, MetricsMap& metrics_map);
 
   static void getAllPathsUtil(const BAGraph& graph, size_t node, std::vector<bool>& visited, std::vector<size_t>& path,
                               const std::function<void(const std::vector<size_t>&)>& callback);
@@ -52,12 +52,12 @@ class MetricCalculator {
   [[nodiscard]] static size_t getNearestNoTwoDegreeNode(const BAGraph& graph, size_t node, std::set<size_t>& banned_nodes);
 
   template <size_t MAX_DEG>
-  [[nodiscard]] static float calculatePathImpact(const BAGraph& graph, const std::vector<size_t>& path);
+  [[nodiscard]] static double calculatePathImpact(const BAGraph& graph, const std::vector<size_t>& path);
 
-  [[nodiscard]] static float phi(size_t node_degree);
+  [[nodiscard]] static double phi(size_t node_degree);
 
   template <size_t MAX_DEG>
-  [[nodiscard]] static float psi(size_t node_degree);
+  [[nodiscard]] static double psi(size_t node_degree);
 
   static constexpr size_t K33_MAX_DEG{3};
   static constexpr size_t K5_MAX_DEG{4};

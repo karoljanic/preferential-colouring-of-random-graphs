@@ -230,7 +230,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithLinkSelection(size_t initial
 }
 
 BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number, size_t final_nodes_number,
-                                                                 size_t edges_per_new_node_number, float copy_probability,
+                                                                 size_t edges_per_new_node_number, double copy_probability,
                                                                  GraphPainter* painter) {
   if (edges_per_new_node_number < 1 || edges_per_new_node_number >= final_nodes_number) {
     throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
@@ -259,7 +259,7 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
     painter->paintEdge(graph, graph.getEdge(node_id, central_node_id));
   }
 
-  std::uniform_real_distribution<float> option_distribution{0.0F, 1.0F};
+  std::uniform_real_distribution<double> option_distribution{0.0F, 1.0F};
   while (graph.getNodesNumber() < final_nodes_number) {
     const size_t node_id = graph.addNode();
     painter->paintNode(graph, graph.getNode(node_id));

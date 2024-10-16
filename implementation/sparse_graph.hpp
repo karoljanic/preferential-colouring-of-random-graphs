@@ -89,8 +89,8 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
   [[nodiscard]] size_t getEdgesNumber() const override { return edges_.size(); }
 
-  [[nodiscard]] float getDensity() const override {
-    return static_cast<float>(2 * getEdgesNumber()) / (getNodesNumber() * (getNodesNumber() - 1));
+  [[nodiscard]] double getDensity() const override {
+    return static_cast<double>(2 * getEdgesNumber()) / (getNodesNumber() * (getNodesNumber() - 1));
   }
 
   [[nodiscard]] std::vector<NodeType> getNeighbours(size_t node_id) const override {

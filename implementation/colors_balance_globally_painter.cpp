@@ -16,12 +16,12 @@ void ColorsBalanceGloballyPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
     ++colors_histogram_[color];
   }
   else {
-    std::uniform_real_distribution<float> distribution{0.0F, 1.0F};
-    const float r = distribution(generator_);
-    float cumulative_probability = 0.0F;
+    std::uniform_real_distribution<double> distribution{0.0F, 1.0F};
+    const double r = distribution(generator_);
+    double cumulative_probability = 0.0F;
     for (const auto& [color, count] : colors_histogram_) {
-      const float probability = static_cast<float>(graph.getEdgesNumber() - count) /
-                          static_cast<float>((edges_colors_.size() - 1) * graph.getEdgesNumber());
+      const double probability = static_cast<double>(graph.getEdgesNumber() - count) /
+                          static_cast<double>((edges_colors_.size() - 1) * graph.getEdgesNumber());
       cumulative_probability += probability;
 
       if (r < cumulative_probability) {

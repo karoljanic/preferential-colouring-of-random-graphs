@@ -36,7 +36,7 @@ class RandomGraphFactory {
   [[nodiscard]] BAGraph createBarabasiAlbertWithLinkSelection(size_t initial_nodes_number, size_t final_nodes_number,
                                                               size_t edges_per_new_node_number, GraphPainter* painter = nullptr);
   [[nodiscard]] BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number, size_t final_nodes_number,
-                                                             size_t edges_per_new_node_number, float copy_probability,
+                                                             size_t edges_per_new_node_number, double copy_probability,
                                                              GraphPainter* painter = nullptr);
 
  private:
