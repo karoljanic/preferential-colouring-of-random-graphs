@@ -46,29 +46,27 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
 
   auto end_metrics_calculation = std::chrono::high_resolution_clock::now();
 
-  std::cout << std::endl;
   for (const auto& edges_color : edges_colors_) {
     const Metric metric = sumMetrics(metrics_map_copy[edges_color]);
 
     metrics[edges_color] = scaleFinalMetric(metric);
-    std::cout << "Color: " << edges_color.hex << " metric: " << metrics[edges_color] << std::endl;
   }
 
   auto end_metrics_merge = std::chrono::high_resolution_clock::now();
 
-//    double lowest_metric_value{std::numeric_limits<double>::max()};
-//    for (const auto& edges_color : edges_colors_) {
-//      if (lowest_metric_value > metrics[edges_color]) {
-//        lowest_metric_value = metrics[edges_color];
-//      }
-//    }
+  //  double lowest_metric_value{std::numeric_limits<double>::max()};
+  //  for (const auto& edges_color : edges_colors_) {
+  //    if (lowest_metric_value > metrics[edges_color]) {
+  //      lowest_metric_value = metrics[edges_color];
+  //    }
+  //  }
 
   double lowest_metric_value{std::numeric_limits<double>::lowest()};
-  for (const auto& edges_color : edges_colors_) {
-    if (lowest_metric_value < metrics[edges_color]) {
-      lowest_metric_value = metrics[edges_color];
+    for (const auto& edges_color : edges_colors_) {
+      if (lowest_metric_value < metrics[edges_color]) {
+        lowest_metric_value = metrics[edges_color];
+      }
     }
-  }
 
   std::vector<ColorType> low_colors;
   for (const auto& edges_color : edges_colors_) {
@@ -97,7 +95,7 @@ void AvoidingKuratowskiGraphsPainter::paintEdge(BAGraph& graph, BAEdge& edge) {
                                     .metrics_calculation_time = static_cast<double>(metrics_calculation_duration.count()),
                                     .metrics_merge_time = static_cast<double>(metrics_merge_duration.count())});
 
-  std::cout << "Painting edge: " << edge.source << " " << edge.target << " to " << low_colors[index].hex << std::endl;
+//  std::cout << "Painting edge: " << edge.source << " " << edge.target << " to " << low_colors[index].hex << std::endl;
 }
 
 void AvoidingKuratowskiGraphsPainter::reset() {

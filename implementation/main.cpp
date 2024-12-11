@@ -6,6 +6,7 @@
 #include "ba_graph.hpp"                            // graph::random::BAGraph
 #include "colors_balance_globally_painter.hpp"     // graph::random::ColorsBalanceLocallyPainter
 #include "colors_balance_locally_painter.hpp"      // graph::random::ColorsBalanceLocallyPainter
+#include "max_planar_subgraph.hpp"                 // graph::random::MaxPlanarSubgraph
 #include "metric_calculator.hpp"                   // graph::random::StaticPainter
 #include "random_graph_factory.hpp"                // graph::random::RandomGraphFactory
 
@@ -20,7 +21,6 @@ using ColorsBalanceGloballyPainter = graph::random::ColorsBalanceGloballyPainter
 using ColorsBalanceLocallyPainter = graph::random::ColorsBalanceLocallyPainter;
 using MetricCalculator = graph::random::MetricCalculator;
 using MetricsMap = graph::random::MetricCalculator::MetricsMap;
-using Metric = graph::random::Metric;
 
 constexpr ColorType Blue{"#1f77b4"};
 constexpr ColorType Orange{"#ff7f0e"};

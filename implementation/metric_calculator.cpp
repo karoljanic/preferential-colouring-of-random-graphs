@@ -172,60 +172,96 @@ void MetricCalculator::expectedMetric(const BAGraph& graph, MetricsMap& metrics_
     }
   }
 
-  size_t degrees_sum = 0;
-  for (size_t node = 0; node < graph.getNodesNumber(); ++node) {
-    degrees_sum += graph.getDegree(node);
-  }
-  const double average_degree = static_cast<double>(degrees_sum) / static_cast<double>(graph.getNodesNumber());
+  const std::map<size_t, std::vector<size_t>> components = enumerateComponents(graph);
+  for (const auto& component : components) {
+    const size_t nodes_number = component.second.size();
 
-  for (size_t node = 0; node < graph.getNodesNumber(); ++node) {
-    if (graph.getDegree(node) == 0) {
-      continue;
-    }
-    metrics_map[node][node].k33 =
-        0.5F * average_degree * std::pow(graph.getDegree(node), -3.0F) * std::log(1.0F + psi<K33_MAX_DEG>(graph.getDegree(node)));
-    metrics_map[node][node].k5 =
-        0.5F * average_degree * std::pow(graph.getDegree(node), -3.0F) * std::log(1.0F + psi<K5_MAX_DEG>(graph.getDegree(node)));
-  }
-
-  for (const auto& edge : graph.getEdges()) {
-    std::set<size_t> edge_neighbors;
-    for (const auto& neighbor : graph.getNeighbours(edge.source)) {
-      edge_neighbors.insert(neighbor.id);
-    }
-    for (const auto& neighbor : graph.getNeighbours(edge.target)) {
-      edge_neighbors.insert(neighbor.id);
-    }
-    edge_neighbors.erase(edge.source);
-    edge_neighbors.erase(edge.target);
-
-    size_t sum_of_neighbors_degrees = 0;
-    for (const auto& neighbor : edge_neighbors) {
-      std::set<size_t> banned_nodes{edge.source, edge.target};
-      sum_of_neighbors_degrees += getNearestNoTwoDegreeNode(graph, neighbor, banned_nodes);
+    size_t degrees_sum = 0;
+    for (const auto& node : component.second) {
+      degrees_sum += graph.getDegree(node);
     }
 
-    double edge_coeff = 1.0F / std::pow(0.5F * average_degree, 0.1F * graph.getNodesNumber());
-    if (sum_of_neighbors_degrees != 0) {
-      edge_coeff -= sum_of_neighbors_degrees / std::pow(0.5F * average_degree, 0.4F * graph.getNodesNumber());
+    const double average_degree = static_cast<double>(degrees_sum)  / 2.0F;
+
+    for (const auto& edge : graph.getEdges()) {
+      if (std::find(component.second.begin(), component.second.end(), edge.source) == component.second.end() ||
+          std::find(component.second.begin(), component.second.end(), edge.target) == component.second.end()) {
+        continue;
+      }
+
+      std::set<size_t> edge_neighbors;
+      for (const auto& neighbor : graph.getNeighbours(edge.source)) {
+        edge_neighbors.insert(neighbor.id);
+      }
+      for (const auto& neighbor : graph.getNeighbours(edge.target)) {
+        edge_neighbors.insert(neighbor.id);
+      }
+      edge_neighbors.erase(edge.source);
+      edge_neighbors.erase(edge.target);
+
+      size_t sum_of_neighbors_degrees = 0;
+      for (const auto& neighbor : edge_neighbors) {
+        std::set<size_t> banned_nodes{edge.source, edge.target};
+        sum_of_neighbors_degrees += getNearestNoTwoDegreeNode(graph, neighbor, banned_nodes);
+      }
+
+      const double coeff = average_degree * std::log(nodes_number);
+
+      const double edge_impact =
+          -coeff * static_cast<double>(graph.getDegree(edge.source)) * static_cast<double>(graph.getDegree(edge.target));
+
+      metrics_map[edge.source][edge.target].k33 += edge_impact;
+      metrics_map[edge.target][edge.source].k33 += edge_impact;
+
+      metrics_map[edge.source][edge.target].k5 += edge_impact;
+      metrics_map[edge.target][edge.source].k5 += edge_impact;
     }
-
-    double edge_impact = 0.0F;
-    if (graph.getDegree(edge.source) != 0) {
-      edge_impact += 0.5F * edge_coeff * std::log(1.0F + phi(graph.getDegree(edge.source)));
-    }
-
-    if (graph.getDegree(edge.target) != 0) {
-      edge_impact += 0.5F * edge_coeff * std::log(1.0F + phi(graph.getDegree(edge.target)));
-    }
-
-    metrics_map[edge.source][edge.target].k33 += edge_impact;
-    metrics_map[edge.target][edge.source].k33 += edge_impact;
-
-    metrics_map[edge.source][edge.target].k5 += edge_impact;
-    metrics_map[edge.target][edge.source].k5 += edge_impact;
   }
 }
+
+//void MetricCalculator::expectedMetric(const BAGraph& graph, MetricsMap& metrics_map) {
+//  for (size_t node1 = 0; node1 < graph.getNodesNumber(); ++node1) {
+//    for (size_t node2 = 0; node2 < graph.getNodesNumber(); ++node2) {
+//      metrics_map[node1][node2] = Metric{};
+//    }
+//  }
+//
+//  size_t degrees_sum = 0;
+//  for (const auto& node : graph.getNodes()) {
+//    degrees_sum += graph.getDegree(node.id);
+//  }
+//
+//  const double average_degree = static_cast<double>(degrees_sum) / static_cast<double>(graph.getNodesNumber()) / 2.0F;
+//
+//  for (const auto& edge : graph.getEdges()) {
+//    std::set<size_t> edge_neighbors;
+//    for (const auto& neighbor : graph.getNeighbours(edge.source)) {
+//      edge_neighbors.insert(neighbor.id);
+//    }
+//    for (const auto& neighbor : graph.getNeighbours(edge.target)) {
+//      edge_neighbors.insert(neighbor.id);
+//    }
+//    edge_neighbors.erase(edge.source);
+//    edge_neighbors.erase(edge.target);
+//
+//    size_t sum_of_neighbors_degrees = 0;
+//    for (const auto& neighbor : edge_neighbors) {
+//      std::set<size_t> banned_nodes{edge.source, edge.target};
+//      sum_of_neighbors_degrees += getNearestNoTwoDegreeNode(graph, neighbor, banned_nodes);
+//    }
+//
+//    const double coeff = average_degree * std::log(graph.getNodesNumber());
+//
+//    const double edge_impact =
+//        -coeff * static_cast<double>(graph.getDegree(edge.source)) * static_cast<double>(graph.getDegree(edge.target));
+//
+//    metrics_map[edge.source][edge.target].k33 += edge_impact;
+//    metrics_map[edge.target][edge.source].k33 += edge_impact;
+//
+//    metrics_map[edge.source][edge.target].k5 += edge_impact;
+//    metrics_map[edge.target][edge.source].k5 += edge_impact;
+//  }
+//}
 
 void MetricCalculator::sumOfNeighboursDegreesMetric(const BAGraph& graph, MetricsMap& metrics_map) {
   for (size_t node1 = 0; node1 < graph.getNodesNumber(); ++node1) {
@@ -251,11 +287,11 @@ void MetricCalculator::sumOfNeighboursDegreesMetric(const BAGraph& graph, Metric
       sum_of_neighbors_degrees += getNearestNoTwoDegreeNode(graph, neighbor, banned_nodes);
     }
 
-    metrics_map[edge.source][edge.target].k33 += sum_of_neighbors_degrees;
-    metrics_map[edge.target][edge.source].k33 += sum_of_neighbors_degrees;
+    metrics_map[edge.source][edge.target].k33 += static_cast<double>(sum_of_neighbors_degrees);
+    metrics_map[edge.target][edge.source].k33 += static_cast<double>(sum_of_neighbors_degrees);
 
-    metrics_map[edge.source][edge.target].k5 += sum_of_neighbors_degrees;
-    metrics_map[edge.target][edge.source].k5 += sum_of_neighbors_degrees;
+    metrics_map[edge.source][edge.target].k5 += static_cast<double>(sum_of_neighbors_degrees);
+    metrics_map[edge.target][edge.source].k5 += static_cast<double>(sum_of_neighbors_degrees);
   }
 
   for (size_t node = 0; node < graph.getNodesNumber(); ++node) {
@@ -307,6 +343,39 @@ void MetricCalculator::getAllPathsWithMaxLengthUtil(const BAGraph& graph, size_t
   visited[node] = false;
 }
 
+std::map<size_t, std::vector<size_t>> MetricCalculator::enumerateComponents(const BAGraph& graph) {
+  std::map<size_t, std::vector<size_t>> components;
+  size_t component_id = 1;
+
+  std::vector<bool> visited(graph.getNodesNumber(), false);
+  for (size_t node = 0; node < graph.getNodesNumber(); ++node) {
+    if (visited[node]) {
+      continue;
+    }
+
+    components[component_id] = std::vector<size_t>{};
+    component_id++;
+
+    std::stack<size_t> stack;
+    stack.push(node);
+    while (!stack.empty()) {
+      const size_t current_node = stack.top();
+      stack.pop();
+
+      visited[current_node] = true;
+      components[component_id - 1].push_back(current_node);
+
+      for (const auto& neighbor : graph.getNeighbours(current_node)) {
+        if (!visited[neighbor.id]) {
+          stack.push(neighbor.id);
+        }
+      }
+    }
+  }
+
+  return components;
+}
+
 size_t MetricCalculator::getNearestNoTwoDegreeNode(const BAGraph& graph, size_t node, std::set<size_t>& banned_nodes) {
   //  return graph.getDegree(node);
 
@@ -336,35 +405,24 @@ double MetricCalculator::calculatePathImpact(const BAGraph& graph, const std::ve
   }
 
   // standard
-  //  double result{1.0F};
-  //  result *= psi<MAX_DEG>(graph.getDegree(path.front()));
-  //  result *= psi<MAX_DEG>(graph.getDegree(path.back()));
+  //    double result{1.0F};
+  //    result *= psi<MAX_DEG>(graph.getDegree(path.front()));
+  //    result *= psi<MAX_DEG>(graph.getDegree(path.back()));
   //
-  //  for (size_t i = 1; i < (path.size() - 1); ++i) {
-  //    result *= phi(graph.getDegree(path.at(i)));
-  //  }
-  //  return result;
+  //    for (size_t i = 1; i < (path.size() - 1); ++i) {
+  //      result *= phi(graph.getDegree(path.at(i)));
+  //    }
+  //    return result;
 
   //   logarithmic
   double result{1.0F};
-  result *= psi<MAX_DEG>(graph.getDegree(path.front()));
-  result *= psi<MAX_DEG>(graph.getDegree(path.back()));
+  //  result *= psi<MAX_DEG>(graph.getDegree(path.front()));
+  //  result *= psi<MAX_DEG>(graph.getDegree(path.back()));
 
   for (size_t i = 1; i < (path.size() - 1); ++i) {
     result *= phi(graph.getDegree(path.at(i)));
   }
-  return std::log(1.0F + result);
-
-  // logarithmic with sum
-  //  double result{0.0F};
-  //  result += std::log(1.0F + psi<MAX_DEG>(graph.getDegree(path.front())));
-  //  result += std::log(1.0F + psi<MAX_DEG>(graph.getDegree(path.back())));
-  //
-  //  for (size_t i = 1; i < (path.size() - 1); ++i) {
-  //    result += std::log(1.0F + phi(graph.getDegree(path.at(i))));
-  //  }
-  //
-  //  return result;
+  return std::log(result);
 }
 
 double MetricCalculator::phi(size_t node_degree) {

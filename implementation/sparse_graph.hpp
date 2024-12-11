@@ -62,6 +62,32 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
                                [&](size_t index) { return edges_[index].source == source && edges_[index].target == target; });
   }
 
+  void removeEdge(size_t node1_id, size_t node2_id) override {
+    const size_t source = node1_id < node2_id ? node1_id : node2_id;
+    const size_t target = node1_id < node2_id ? node2_id : node1_id;
+
+    for (auto iter = adjacency_list_[source].begin(); iter != adjacency_list_[source].end(); ++iter) {
+      if (edges_[*iter].source == source && edges_[*iter].target == target) {
+        adjacency_list_[source].erase(iter);
+        break;
+      }
+    }
+
+    for (auto iter = adjacency_list_[target].begin(); iter != adjacency_list_[target].end(); ++iter) {
+      if (edges_[*iter].source == target && edges_[*iter].target == source) {
+        adjacency_list_[target].erase(iter);
+        break;
+      }
+    }
+
+    for (auto iter = edges_.begin(); iter != edges_.end(); ++iter) {
+      if (iter->source == source && iter->target == target) {
+        edges_.erase(iter);
+        break;
+      }
+    }
+  }
+
   [[nodiscard]] NodeType& getNode(size_t node_id) override { return nodes_[node_id]; }
 
   [[nodiscard]] NodeType& getLastAddedNode() override { return nodes_.back(); }

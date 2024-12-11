@@ -49,6 +49,8 @@ class MetricCalculator {
                                            std::vector<size_t>& path, size_t max_length,
                                            const std::function<void(const std::vector<size_t>&)>& callback);
 
+  [[nodiscard]] static std::map<size_t, std::vector<size_t>> enumerateComponents(const BAGraph& graph);
+
   [[nodiscard]] static size_t getNearestNoTwoDegreeNode(const BAGraph& graph, size_t node, std::set<size_t>& banned_nodes);
 
   template <size_t MAX_DEG>

@@ -39,6 +39,7 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class Graph {
   virtual size_t addNode() = 0;
   virtual void addEdge(size_t node1_id, size_t node2_id) = 0;
   [[nodiscard]] virtual bool edgeExists(size_t node1_id, size_t node2_id) const = 0;
+  virtual void removeEdge(size_t node1_id, size_t node2_id) = 0;
 
   [[nodiscard]] virtual NodeType& getNode(size_t node_id) = 0;
   [[nodiscard]] virtual NodeType& getLastAddedNode() = 0;
