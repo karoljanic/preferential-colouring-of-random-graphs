@@ -1,4 +1,4 @@
-Preferential Colouring of Random Graphs
+# Preferential Colouring of Random Graphs
 
 This repository contains the code and resources for my bachelor thesis on the preferential colouring of random graphs. 
 The main programming languages used are C++, Python and Mathematica.
@@ -16,5 +16,7 @@ Significant improvements in the quality of the solutions were achieved without c
 
 Additionally, one application of such coloring was described.
 
-[Polish version of Thesis](preferencyjne_kolorowanie_grafow_losowych.pdf)
-[English version of Thesis](preferential_coloring_of_random_graphs.pdf)
+
+[Polish version of the thesis](preferencyjne_kolorowanie_grafow_losowych.pdf)
+
+[English version of the thesis](preferential_coloring_of_random_graphs.pdf)
