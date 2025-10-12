@@ -1,0 +1,4 @@
+ipykernel >= 6.0
+sympy >= 1.10
+networkx >= 3.0
+matplotlib >= 3.10.0
