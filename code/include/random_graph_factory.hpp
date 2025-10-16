@@ -38,6 +38,8 @@ class RandomGraphFactory {
   [[nodiscard]] BAGraph createBarabasiAlbertWithCopyingModel(size_t initial_nodes_number, size_t final_nodes_number,
                                                              size_t edges_per_new_node_number, double copy_probability,
                                                              GraphPainter* painter = nullptr);
+  [[nodiscard]] BAGraph createBarabasiAlbertWithLCDModel(size_t final_nodes_number, size_t edges_per_new_node_number,
+                                                         GraphPainter* painter = nullptr);
 
  private:
   std::mt19937 generator_{std::random_device{}()};

@@ -33,8 +33,11 @@ int main(int argc, char* argv[]) {
     case 4:
       graph = random_graph_factory.createBarabasiAlbertWithCopyingModel(initial_vertices, final_vertices, edges_per_vertex, 0.5);
       break;
+    case 5:
+      graph = random_graph_factory.createBarabasiAlbertWithLCDModel(final_vertices, edges_per_vertex);
+      break;
     default:
-      std::cerr << "Invalid method. Choose between 1 and 4.\n";
+      std::cerr << "Invalid method. Choose between 1 and 5.\n";
       return 0;
   }
 

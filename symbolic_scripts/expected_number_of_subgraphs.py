@@ -155,33 +155,106 @@ def expected_number_of_subgraphs(
     )
 
 
+def expected_number_of_cycle_subgraphs(
+    graph_vertices_number: Union[sympy.Integer, sympy.Symbol],
+    graph_average_degree: Union[sympy.Integer, sympy.Symbol],
+    cycle_length: int,
+) -> sympy.Expr:
+    """
+    Calculates the expected number of occurrences of cycle subgraphs of a given length within a larger graph.
+
+    Parameters:
+        graph_vertices_number (Union[sympy.Integer, sympy.Symbol]): Total number of vertices in the larger graph.
+        graph_average_degree (Union[sympy.Integer, sympy.Symbol]): Mean degree of the larger graph.
+        cycle_length (int): Length of the cycle subgraph.
+
+    Returns:
+        sympy.Expr: The expected number of occurrences of the cycle subgraph - (1 + o(1)).
+    """
+
+    return expected_number_of_subgraphs(
+        graph_vertices_number,
+        graph_average_degree,
+        cycle_length,
+        cycle_length,
+        lambda g: len(g.nodes) == cycle_length and all(d == 2 for _, d in g.degree()),
+    )
+
+
+def expected_number_of_clique_subgraphs(
+    graph_vertices_number: Union[sympy.Integer, sympy.Symbol],
+    graph_average_degree: Union[sympy.Integer, sympy.Symbol],
+    clique_size: int,
+) -> sympy.Expr:
+    """
+    Calculates the expected number of occurrences of clique subgraphs of a given size within a larger graph.
+
+    Parameters:
+        graph_vertices_number (Union[sympy.Integer, sympy.Symbol]): Total number of vertices in the larger graph.
+        graph_average_degree (Union[sympy.Integer, sympy.Symbol]): Mean degree of the larger graph.
+        clique_size (int): Size of the clique subgraph.
+
+    Returns:
+        sympy.Expr: The expected number of occurrences of the clique subgraph - (1 + o(1)).
+    """
+
+    return expected_number_of_subgraphs(
+        graph_vertices_number,
+        graph_average_degree,
+        clique_size,
+        clique_size * (clique_size - 1) // 2,
+        lambda g: len(g.nodes) == clique_size
+        and all(d == clique_size - 1 for _, d in g.degree()),
+    )
+
+
+def expected_number_of_bipartite_complete_subgraphs(
+    graph_vertices_number: Union[sympy.Integer, sympy.Symbol],
+    graph_average_degree: Union[sympy.Integer, sympy.Symbol],
+    part_size: int,
+) -> sympy.Expr:
+    """
+    Calculates the expected number of occurrences of complete bipartite subgraphs K_{part_size, part_size} within a larger graph.
+
+    Parameters:
+        graph_vertices_number (Union[sympy.Integer, sympy.Symbol]): Total number of vertices in the larger graph.
+        graph_average_degree (Union[sympy.Integer, sympy.Symbol]): Mean degree of the larger graph.
+        part_size (int): Size of each part in the bipartite subgraph.
+
+    Returns:
+        sympy.Expr: The expected number of occurrences of the complete bipartite subgraph - (1 + o(1)).
+    """
+
+    return expected_number_of_subgraphs(
+        graph_vertices_number,
+        graph_average_degree,
+        2 * part_size,
+        part_size * part_size,
+        lambda g: nx.algorithms.bipartite.is_bipartite(g)
+        and len(g.nodes) == 2 * part_size
+        and all(d == part_size for _, d in g.degree()),
+    )
+
+
 # Usage:
 if __name__ == "__main__":
-    expected_number_of_k3_subgraphs = expected_number_of_subgraphs(
+    expected_number_of_k3_subgraphs = expected_number_of_cycle_subgraphs(
         sympy.symbols("n"),
         sympy.symbols("m"),
         3,
-        3,
-        lambda g: len(g.nodes) == 3 and all(d == 2 for _, d in g.degree()),
     )
     print(f"Expected number of K3 subgraphs: {expected_number_of_k3_subgraphs}")
 
-    expected_number_of_k5_subgraphs = expected_number_of_subgraphs(
+    expected_number_of_k5_subgraphs = expected_number_of_clique_subgraphs(
         sympy.symbols("n"),
         sympy.symbols("m"),
         5,
-        10,
-        lambda g: len(g.nodes) == 5 and all(d == 4 for _, d in g.degree()),
     )
     print(f"Expected number of K5 subgraphs: {expected_number_of_k5_subgraphs}")
 
-    expected_number_of_k33_subgraphs = expected_number_of_subgraphs(
+    expected_number_of_k33_subgraphs = expected_number_of_bipartite_complete_subgraphs(
         sympy.symbols("n"),
         sympy.symbols("m"),
-        6,
-        9,
-        lambda g: nx.algorithms.bipartite.is_bipartite(g)
-        and len(g.nodes) == 6
-        and all(d == 3 for _, d in g.degree()),
+        3,
     )
     print(f"Expected number of K3,3 subgraphs: {expected_number_of_k33_subgraphs}")

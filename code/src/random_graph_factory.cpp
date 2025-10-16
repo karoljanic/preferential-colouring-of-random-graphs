@@ -295,4 +295,51 @@ BAGraph RandomGraphFactory::createBarabasiAlbertWithCopyingModel(size_t initial_
 
   return graph;
 }
+
+
+BAGraph RandomGraphFactory::createBarabasiAlbertWithLCDModel(size_t final_nodes_number, size_t edges_per_new_node_number,
+                                                         GraphPainter* painter) {
+  if (edges_per_new_node_number < 1 || edges_per_new_node_number >= final_nodes_number) {
+    throw std::invalid_argument("Edges per new node number must be greater than 0 and less than final nodes number");
+  }
+
+  std::vector<size_t> repeated_nodes;
+  for(size_t t = 1; t <= final_nodes_number * edges_per_new_node_number; ++t) {
+    repeated_nodes.push_back(t);
+
+    std::uniform_int_distribution<size_t> repeated_node_distribution{0, repeated_nodes.size() - 1};
+    size_t selected_node_id = repeated_nodes[repeated_node_distribution(generator_)];
+
+    repeated_nodes.push_back(selected_node_id);
+  }
+
+  std::map<size_t, size_t> node_id_map;
+  for(size_t v = 0; v < final_nodes_number; ++v) {
+    for(size_t m = 1; m <= edges_per_new_node_number; ++m) {
+      node_id_map[v * edges_per_new_node_number + m] = v;
+    }
+  }
+
+  BAGraph graph;
+  for(size_t i = 0; i < final_nodes_number; ++i) {
+    const size_t node_id = graph.addNode();
+    if (painter != nullptr) {
+      painter->paintNode(graph, graph.getNode(node_id));
+    }
+  }
+
+  for(size_t i = 0; i < repeated_nodes.size(); i += 2) {
+    const size_t u = node_id_map[repeated_nodes[i]];
+    const size_t v = node_id_map[repeated_nodes[i + 1]];
+
+    if(u != v && !graph.edgeExists(u, v)) {
+      graph.addEdge(u, v);
+      if(painter != nullptr) {
+        painter->paintEdge(graph, graph.getEdge(u, v));
+      }
+    }
+  }
+
+  return graph;
+}
 }  // namespace graph::random
