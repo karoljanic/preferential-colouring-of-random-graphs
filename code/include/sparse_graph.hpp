@@ -52,6 +52,7 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
     adjacency_list_[node1_id].emplace_back(edges_.size());
     adjacency_list_[node2_id].emplace_back(edges_.size());
     edges_.emplace_back(edge);
+    edge_exists_.emplace_back(true);
   }
 
   [[nodiscard]] bool edgeExists(size_t node1_id, size_t node2_id) const override {
@@ -80,9 +81,10 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
       }
     }
 
-    for (auto iter = edges_.begin(); iter != edges_.end(); ++iter) {
-      if (iter->source == source && iter->target == target) {
-        edges_.erase(iter);
+    for (size_t i = 0; i < edges_.size(); ++i) {
+      const EdgeType& edge = edges_[i];
+      if (edge.source == source && edge.target == target) {
+        edge_exists_[i] = false;
         break;
       }
     }
@@ -109,11 +111,27 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
   [[nodiscard]] EdgeType& getLastAddedEdge() override { return edges_.back(); }
 
-  [[nodiscard]] std::vector<EdgeType> getEdges() const override { return edges_; }
+  [[nodiscard]] std::vector<EdgeType> getEdges() const override {
+    std::vector<EdgeType> existing_edges;
+    for (size_t i = 0; i < edges_.size(); ++i) {
+      if (edge_exists_[i]) {
+        existing_edges.emplace_back(edges_[i]);
+      }
+    }
+    return existing_edges;
+  }
 
   [[nodiscard]] size_t getNodesNumber() const override { return nodes_.size(); }
 
-  [[nodiscard]] size_t getEdgesNumber() const override { return edges_.size(); }
+  [[nodiscard]] size_t getEdgesNumber() const override {
+    size_t count = 0;
+    for (bool const exists : edge_exists_) {
+      if (exists) {
+        ++count;
+      }
+    }
+    return count;
+  }
 
   [[nodiscard]] double getDensity() const override {
     return static_cast<double>(2 * getEdgesNumber()) / (getNodesNumber() * (getNodesNumber() - 1));
@@ -135,7 +153,11 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
   [[nodiscard]] std::vector<EdgeType> getAdjacentEdges(size_t node_id) const override {
     std::vector<EdgeType> edges;
-    for (const EdgeType& edge : edges_) {
+    for (size_t index = 0; index < edges_.size(); ++index) {
+      if (!edge_exists_[index]) {
+        continue;
+      }
+      const EdgeType& edge = edges_[index];
       if (edge.source == node_id || edge.target == node_id) {
         edges.emplace_back(edge);
       }
@@ -231,6 +253,10 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
     file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
     for (size_t i = 0; i < getEdgesNumber(); ++i) {
+      if (!edge_exists_[i]) {
+        continue;
+      }
+
       file << "    {\"source\": " << edges_[i].source << ", \"target\": " << edges_[i].target << "}," << std::endl;
     }
     file << "    { }" << std::endl;
@@ -252,6 +278,10 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
 
     file << "  ]," << std::endl << "  \"edges\": [" << std::endl;
     for (size_t i = 0; i < getEdgesNumber(); ++i) {
+      if (!edge_exists_[i]) {
+        continue;
+      }
+
       file << "    {\"source\": " << edges_[i].source << ", \"target\": " << edges_[i].target;
       edgeCallback(file, edges_[i]);
       file << "}," << std::endl;
@@ -285,6 +315,7 @@ requires HasId<NodeType>&& HasSourceAndTarget<EdgeType> class SparseGraph : publ
  private:
   std::vector<NodeType> nodes_;
   std::vector<EdgeType> edges_;
+  std::vector<bool> edge_exists_;
   std::vector<std::vector<size_t>> adjacency_list_;
 };
 }  // namespace graph

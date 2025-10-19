@@ -403,16 +403,18 @@ void MaxPlanarSubgraph::weightedMaximizeSubgraph(const BAGraph& graph, BAGraph& 
 size_t MaxPlanarSubgraph::crossingEdges(const BAGraph& graph) {
   // count number of edges to remove to get planar graph
 
-  for (size_t edges_to_remove = 0; edges_to_remove < graph.getEdgesNumber(); ++edges_to_remove) {
-    std::vector<size_t> mask(graph.getEdgesNumber(), 0);
-    std::fill(mask.begin(), mask.begin() + edges_to_remove, 1);
+  const std::vector<BAEdge> edges = graph.getEdges();
+
+  for (size_t edges_to_remove = 0; edges_to_remove < edges.size(); ++edges_to_remove) {
+    std::vector<size_t> mask(edges.size(), 0);
+    std::fill(mask.end() - edges_to_remove, mask.end(), 1);
 
     do {
       BAGraph subgraph = graph;
 
-      for (size_t i = 0; i < graph.getEdgesNumber(); ++i) {
+      for (size_t i = 0; i < edges.size(); ++i) {
         if (mask[i] == 1) {
-          subgraph.removeEdge(graph.getEdges()[i].source, graph.getEdges()[i].target);
+          subgraph.removeEdge(edges.at(i).source, edges.at(i).target);
         }
       }
 
@@ -421,6 +423,8 @@ size_t MaxPlanarSubgraph::crossingEdges(const BAGraph& graph) {
       }
     } while (std::prev_permutation(mask.begin(), mask.end()));
   }
+
+  return edges.size();
 }
 
 size_t MaxPlanarSubgraph::edgeWeight(const BAGraph& graph, size_t source, size_t target) {

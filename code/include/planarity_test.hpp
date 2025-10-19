@@ -9,6 +9,7 @@
 
 #include "ba_graph.hpp"
 
+namespace graph::random {
 class PlanarityTest {
  public:
   PlanarityTest() = default;
@@ -21,14 +22,14 @@ class PlanarityTest {
 
   ~PlanarityTest() = default;
 
-  static bool isPlanar(const graph::random::BAGraph& graph) {
+  static bool isPlanar(const BAGraph& graph) {
     ogdf::Graph ogdf_graph;
     toOgdf(graph, ogdf_graph);
 
     return ogdf::isPlanar(ogdf_graph);
   }
 
-  static void boyerMyrvoldPlanarSubgraph(const graph::random::BAGraph& graph, graph::random::BAGraph& subgraph) {
+  static void boyerMyrvoldPlanarSubgraph(const BAGraph& graph, BAGraph& subgraph) {
     ogdf::Graph ogdf_graph;
     toOgdf(graph, ogdf_graph);
 
@@ -40,12 +41,12 @@ class PlanarityTest {
       ogdf_graph.delEdge(edge);
     }
 
-    subgraph = graph::random::BAGraph();
+    subgraph = BAGraph();
     fromOgdf(ogdf_graph, subgraph);
   }
 
  private:
-  static void toOgdf(const graph::random::BAGraph& graph, ogdf::Graph& ogdf_graph) {
+  static void toOgdf(const BAGraph& graph, ogdf::Graph& ogdf_graph) {
     std::vector<ogdf::node> nodes(graph.getNodesNumber());
     for (size_t i = 0; i < graph.getNodesNumber(); ++i) {
       nodes[i] = ogdf_graph.newNode();
@@ -56,7 +57,7 @@ class PlanarityTest {
     }
   }
 
-  static void fromOgdf(const ogdf::Graph& ogdf_graph, graph::random::BAGraph& graph) {
+  static void fromOgdf(const ogdf::Graph& ogdf_graph, BAGraph& graph) {
     for (const auto& node : ogdf_graph.nodes) {
       graph.addNode();
     }
@@ -66,5 +67,6 @@ class PlanarityTest {
     }
   }
 };
+}  // namespace graph::random
 
 #endif  // PLANARITY_TEST_HPP

@@ -28,13 +28,16 @@ set(SOURCE_FILES
         src/preferential_coloring.cpp)
 
 add_executable(GenerateGraph ${SOURCE_FILES} app/generate_graph.cpp)
-# add_executable(MaximalPlanarSubgraphs ${SOURCE_FILES} app/maximal_planar_subgraphs.cpp)
-# add_executable(MinimumColoring ${SOURCE_FILES} app/minimum_coloring.cpp)
-# add_executable(MinimalCrossingEdges ${SOURCE_FILES} app/minimal_crossing_edges.cpp)
+add_executable(MaximalPlanarSubgraphs ${SOURCE_FILES} app/maximal_planar_subgraphs.cpp)
+add_executable(MinimumColoring ${SOURCE_FILES} app/minimum_coloring.cpp)
+add_executable(MinimalCrossingEdges ${SOURCE_FILES} app/minimal_crossing_edges.cpp)
 
 set_target_properties(GenerateGraph PROPERTIES OUTPUT_NAME "generate_graph")
+set_target_properties(MaximalPlanarSubgraphs PROPERTIES OUTPUT_NAME "maximal_planar_subgraphs")
+set_target_properties(MinimumColoring PROPERTIES OUTPUT_NAME "minimum_coloring")
+set_target_properties(MinimalCrossingEdges PROPERTIES OUTPUT_NAME "minimal_crossing_edges")
 
 target_link_libraries(GenerateGraph PRIVATE nlohmann_json::nlohmann_json OGDF)
-# target_link_libraries(MaximalPlanarSubgraphs PRIVATE nlohmann_json::nlohmann_json OGDF)
-# target_link_libraries(MinimumColoring PRIVATE nlohmann_json::nlohmann_json OGDF)
-# target_link_libraries(MinimalCrossingEdges PRIVATE nlohmann_json::nlohmann_json OGDF)
+target_link_libraries(MaximalPlanarSubgraphs PRIVATE nlohmann_json::nlohmann_json OGDF)
+target_link_libraries(MinimumColoring PRIVATE nlohmann_json::nlohmann_json OGDF)
+target_link_libraries(MinimalCrossingEdges PRIVATE nlohmann_json::nlohmann_json OGDF)

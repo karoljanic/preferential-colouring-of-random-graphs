@@ -20,7 +20,9 @@ std::vector<BAGraph> PreferentialColoring::color(const BAGraph& graph, size_t co
     for (size_t color = 0; color < colors_count; ++color) {
       subgraphs[color].addNode();
     }
+  }
 
+  for (const auto node : nodes_order) {
     for (const auto neighbour : graph.getNeighbours(node)) {
       if (neighbour.id < node) {
         std::vector<size_t> sum_of_edge_degrees_products_copy = sum_of_edge_degrees_products;
@@ -59,7 +61,7 @@ std::vector<BAGraph> PreferentialColoring::color(const BAGraph& graph, size_t co
           double min_metric = std::numeric_limits<double>::max();
           for (size_t color = 0; color < colors_count; ++color) {
             const double metric = static_cast<double>(sum_of_edge_degrees_products_copy[color]) *
-                            (subgraphs[color].getEdgesNumber() + 1) * std::log(subgraphs[color].getNodesNumber() + 1);
+                                  (subgraphs[color].getEdgesNumber() + 1) * std::log(subgraphs[color].getNodesNumber() + 1);
             if (metric < min_metric) {
               min_metric = metric;
               new_color = color;
