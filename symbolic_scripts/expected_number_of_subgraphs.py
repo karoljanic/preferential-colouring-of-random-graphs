@@ -5,7 +5,7 @@ import itertools
 
 """ Contains functions to calculate the expected number of occurrences of specific subgraphs 
     within a larger Barabási---Albert graph. Results are symbolic expressions in terms of
-    the number of vertices (n) and the mean degree (m) of the graph and with assymptotic accuracy (1 + o(1)).
+    the number of vertices (n) and the mean degree (m) of the graph and with Theta asymptotic.
     
     Based on the method described in the paper:
     https://www.stat.berkeley.edu/~aldous/Networks/boll1.pdf """
@@ -58,6 +58,33 @@ def integer_partitions(n: int) -> Iterator[List[int]]:
         yield partition
 
 
+def expected_number_of_index_choices(
+    graph_vertices_number: Union[sympy.Integer, sympy.Symbol],
+    graph_average_degree: Union[sympy.Integer, sympy.Symbol],
+    subgraph_vertices_number: int,
+    subgraph_edges_number: int,
+) -> sympy.Expr:
+    """
+    Calculates the expected number of ways to choose indices for a specific subgraph within a larger graph.
+
+    Parameters:
+        graph_vertices_number (Union[sympy.Integer, sympy.Symbol]): Total number of vertices in the larger graph.
+        graph_average_degree (Union[sympy.Integer, sympy.Symbol]): Mean degree of the larger graph.
+        subgraph_vertices_number (int): Number of vertices in the subgraph.
+        subgraph_edges_number (int): Number of edges in the subgraph.
+
+    Returns:
+        sympy.Expr: The expected number of ways to choose indices for the subgraph - Theta asymptotic.
+    """
+
+    return sympy.harmonic(
+        graph_vertices_number,
+        sympy.Integer(subgraph_edges_number) / sympy.Integer(subgraph_vertices_number),
+    ) ** sympy.Integer(subgraph_vertices_number) / sympy.factorial(
+        subgraph_vertices_number
+    )
+
+
 def expected_number_of_subgraphs(
     graph_vertices_number: Union[sympy.Integer, sympy.Symbol],
     graph_average_degree: Union[sympy.Integer, sympy.Symbol],
@@ -76,7 +103,7 @@ def expected_number_of_subgraphs(
         subgraph_validator (Callable[[nx.Graph], bool]): A function that takes a NetworkX graph and returns True if it matches the desired subgraph structure.
 
     Returns:
-        sympy.Expr: The expected number of occurrences of the subgraph - (1 + o(1)).
+        sympy.Expr: The expected number of occurrences of the subgraph - Theta asymptotic.
     """
 
     total_probability = sympy.Integer(0)
@@ -139,19 +166,11 @@ def expected_number_of_subgraphs(
 
             total_probability += single_probability
 
-    return (
-        (sympy.Integer(1) / sympy.factorial(subgraph_vertices_number))
-        ** (
-            sympy.Integer(subgraph_edges_number)
-            / sympy.Integer(subgraph_vertices_number)
-        )
-        * total_probability.factor()
-        * sympy.harmonic(
-            graph_vertices_number,
-            sympy.Integer(subgraph_edges_number)
-            / sympy.Integer(subgraph_vertices_number),
-        )
-        ** sympy.Integer(subgraph_vertices_number)
+    return total_probability.factor() * expected_number_of_index_choices(
+        graph_vertices_number,
+        graph_average_degree,
+        subgraph_vertices_number,
+        subgraph_edges_number,
     )
 
 
@@ -169,7 +188,7 @@ def expected_number_of_cycle_subgraphs(
         cycle_length (int): Length of the cycle subgraph.
 
     Returns:
-        sympy.Expr: The expected number of occurrences of the cycle subgraph - (1 + o(1)).
+        sympy.Expr: The expected number of occurrences of the cycle subgraph - Theta asymptotic.
     """
 
     return expected_number_of_subgraphs(
@@ -195,7 +214,7 @@ def expected_number_of_clique_subgraphs(
         clique_size (int): Size of the clique subgraph.
 
     Returns:
-        sympy.Expr: The expected number of occurrences of the clique subgraph - (1 + o(1)).
+        sympy.Expr: The expected number of occurrences of the clique subgraph - Theta asymptotic.
     """
 
     return expected_number_of_subgraphs(
@@ -222,7 +241,7 @@ def expected_number_of_bipartite_complete_subgraphs(
         part_size (int): Size of each part in the bipartite subgraph.
 
     Returns:
-        sympy.Expr: The expected number of occurrences of the complete bipartite subgraph - (1 + o(1)).
+        sympy.Expr: The expected number of occurrences of the complete bipartite subgraph - Theta asymptotic.
     """
 
     return expected_number_of_subgraphs(
