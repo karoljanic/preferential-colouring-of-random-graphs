@@ -237,7 +237,7 @@ void MaxPlanarSubgraph::weightedCactusBased(const BAGraph& graph, BAGraph& max_p
     const size_t weight_rhs = edgeWeight(graph, rhs[0], rhs[1]) + edgeWeight(graph, rhs[0], rhs[2]) +
                               edgeWeight(graph, rhs[0], rhs[3]) + edgeWeight(graph, rhs[1], rhs[2]) +
                               edgeWeight(graph, rhs[1], rhs[3]);
-    return weight_lhs < weight_rhs;
+    return weight_lhs > weight_rhs;
   });
 
   for (const auto& diamond : diamonds) {
@@ -300,7 +300,7 @@ void MaxPlanarSubgraph::weightedCactusBased(const BAGraph& graph, BAGraph& max_p
         edgeWeight(graph, lhs[0], lhs[1]) + edgeWeight(graph, lhs[0], lhs[2]) + edgeWeight(graph, lhs[1], lhs[2]);
     const size_t weight_rhs =
         edgeWeight(graph, rhs[0], rhs[1]) + edgeWeight(graph, rhs[0], rhs[2]) + edgeWeight(graph, rhs[1], rhs[2]);
-    return weight_lhs < weight_rhs;
+    return weight_lhs > weight_rhs;
   });
 
   for (const auto& triangle : triangles) {
@@ -336,7 +336,7 @@ void MaxPlanarSubgraph::weightedCactusBased(const BAGraph& graph, BAGraph& max_p
   }
 
   std::sort(remainingEdges.begin(), remainingEdges.end(), [&graph](const BAEdge& lhs, const BAEdge& rhs) {
-    return edgeWeight(graph, lhs.source, lhs.target) < edgeWeight(graph, rhs.source, rhs.target);
+    return edgeWeight(graph, lhs.source, lhs.target) > edgeWeight(graph, rhs.source, rhs.target);
   });
 
   for (const auto& edge : remainingEdges) {
